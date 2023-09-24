@@ -1,0 +1,59 @@
+﻿@page "/"
+@page "/Products/Products"
+
+@using DAL
+@using DAL.Contracts;
+@using DAL.Models
+
+@inject IProductService _db
+<h3>Products</h3>
+
+@if (products is null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<!-- CAROUSEL START-->
+	<section class="py-5 text-center container">
+		<div class="col-lg-8 mx-auto">
+			<div class="img-wrap">
+				<img class="img-fluid" src="https://cb.scene7.com/is/image/Crate/cb_dPLP_20230209_OutdoorDinnerwareV2?wid=1440&qlt=85&op_sharpen=1">
+			</div>
+		</div>
+	</section>
+	<!-- CAROUSEL END-->
+	<div class="row">
+	@foreach (var product in products)
+	{
+		
+			<!--cards-->
+			<div class="col-md-3">
+				<figure class="card card-product rounded-0 border-0" style="height: 500px;">
+					<div class="col-md-12 img-fluid">
+
+						<img class="img-fluid" src="https://cb.scene7.com/is/image/Crate/FauxBoisMelDinnerPltSSS21/$web_pdp_main_carousel_med$/201215170032/faux-bois-melamine-dinner-plate.jpg">
+						@*<img [src]="product?.images[0]?.convertedProductImage || '../../assets/default-image.png'" class="img-fluid" />*@
+					</div>
+					<div class="bottom-wrap text-center mt-3">
+						<span class="small">New Arrival</span>
+						<h5 class="title">@product.Product_Name</h5>
+						<div class="price-wrap h6">
+							<span class="price-new">@product.Price</span> <br>
+							<del class="text-muted"> $1980</del>
+						</div> <!-- price-wrap.// -->
+					</div> <!-- bottom-wrap.// -->
+				</figure>
+			</div>
+	}
+	</div>
+}
+@code {
+	private List<Product> products;
+	protected override async Task OnInitializedAsync()
+	{
+		products = await _db.GetProducts();
+	}
+}
+
+

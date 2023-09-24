@@ -1,0 +1,72 @@
+﻿@page "/Admin/AddProduct"
+
+@using DAL
+@using DAL.Contracts;
+@using DAL.Models
+@using BTMAppUI.Data.Models
+
+@inject IProductService productRepository
+<h3>AddProduct</h3>
+
+@code {
+	private ProductModel product = new ProductModel();
+	private List<Product> products;
+	protected override async Task OnInitializedAsync()
+	{
+		products = await productRepository.GetProducts();
+	}
+
+	private async Task AddNewProduct()
+	{
+		Product p = new Product
+			{
+				Product_Name = product.Product_Name,
+				Price = product.Price
+			};
+
+		await productRepository.AddProduct(p);
+
+		product = new ProductModel();
+		products = await productRepository.GetProducts();
+
+	}
+}
+
+<EditForm Model="@product" OnValidSubmit="@AddNewProduct">
+	<DataAnnotationsValidator />
+	<ValidationSummary />
+
+	<InputText id="Product_Name" @bind-Value="product.Product_Name" />
+	<InputNumber id="Price" @bind-Value="product.Price" />
+
+	<input type="submit" value="Submit" class="btn btn-primary" />
+</EditForm>
+
+
+@if (products is null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<table>
+		<thead>
+			<tr>
+				<th>Product Id</th>
+				<th>Product Name</th>
+				<th>Product Price</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var product in products)
+			{
+				<tr>
+					<td>@product.Product_Id</td>
+					<td>@product.Product_Name</td>
+					<td>@product.Price</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+}
