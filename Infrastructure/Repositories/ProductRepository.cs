@@ -1,22 +1,23 @@
 ﻿using DAL.Contracts;
 using DAL.Models;
+using Infrastructure.Repositories.Generics;
 using System.Linq.Expressions;
 
 namespace Infrastructure.Repositories
 {
 	/*
-	 This talks directly to the database - ISQLDataAccess
+	 B - Class Inheritance and Polymorphism
 	 */
-	public class ProductRepository : IProductRepository
+	public class ProductRepository : GenericRepository<Product>
 	{
 		private readonly ISQLDataAccess _db;
 
-		public ProductRepository(ISQLDataAccess db)
+		public ProductRepository(ISQLDataAccess db) : base(db)
 		{
 			_db = db;
 		}
 
-		public Task Add(Product product)
+		public override Task Add(Product product)
 		{
 			string sql = @"INSERT INTO dbo.Products ([Product_Name]
                           ,[Price]
@@ -41,7 +42,7 @@ namespace Infrastructure.Repositories
 			return _db.SaveData(sql, product);
 		}
 
-		public Task<List<Product>> All()
+		public override Task<List<Product>> All()
 		{
 			string sql = "SELECT * FROM dbo.Products ORDER BY Product_Id DESC";
 
@@ -50,29 +51,11 @@ namespace Infrastructure.Repositories
 
         }
 
-		public void Delete(Product entity)
+		public override void Delete(int id)
 		{
+			string sql = $"DELETE FROM dbo.Products WHERE Product_Id =" + id;
+			var products = _db.DeleteData(sql, id);
 
-		}
-
-		public IEnumerable<Product> Find(Expression<Func<Product, bool>> predicate)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Product Get(int id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void SaveChanges()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Update(Product entity)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

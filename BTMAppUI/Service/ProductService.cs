@@ -30,5 +30,11 @@ namespace Infrastructure.Service
 		{
 			return _productRepository.Add(product);
 		}
+
+		public Task Delete(int product_Id)
+		{
+			_productRepository.Delete(product_Id);
+			return Task.FromResult("Product was successfully removed.");
+		}
 	}
 }

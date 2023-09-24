@@ -1,0 +1,50 @@
+﻿using DAL.Contracts;
+using System.Linq.Expressions;
+using System.Text;
+
+namespace Infrastructure.Repositories.Generics
+{
+	public abstract class GenericRepository<T> : IRepository<T> where T : class
+	{
+		private readonly ISQLDataAccess _db;
+
+		public GenericRepository(ISQLDataAccess db)
+        {
+			_db = db;
+		}
+        public virtual Task Add(T entity)
+		{
+			throw new NotImplementedException();
+		}
+
+		public virtual Task<List<T>> All()
+		{
+			throw new NotImplementedException();
+		}
+
+		public virtual void Delete(int id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public virtual IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
+		{
+			throw new NotImplementedException();
+		}
+
+		public virtual T Get(int id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public virtual void SaveChanges()
+		{
+			throw new NotImplementedException();
+		}
+
+		public virtual void Update(T entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
+}

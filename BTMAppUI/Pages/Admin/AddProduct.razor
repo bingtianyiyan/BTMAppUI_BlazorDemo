@@ -28,7 +28,13 @@
 
 		product = new ProductModel();
 		products = await productRepository.GetProducts();
+	}
 
+	private async Task Delete_Click(int id)
+	{
+		await productRepository.Delete(id);
+		Product product = products.Where(x=>x.Product_Id == id).FirstOrDefault();
+		products.Remove(product);
 	}
 }
 
@@ -64,6 +70,11 @@ else
 					<td>@product.Product_Id</td>
 					<td>@product.Product_Name</td>
 					<td>@product.Price</td>
+					<td>
+						<button class="btn btn-danger" type="button" @onclick="() => Delete_Click(product.Product_Id)">
+							Delete
+						</button>
+					</td>
 				</tr>
 			}
 		</tbody>

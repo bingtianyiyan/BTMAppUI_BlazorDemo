@@ -8,7 +8,7 @@ namespace Infrastructure.Repositories
         Task Add(T entity);
         void Update(T entity);
         T Get(int id);
-        void Delete(T entity);
+        void Delete(int id);
         Task<List<T>> All();
 		IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
         void SaveChanges();
