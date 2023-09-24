@@ -6,6 +6,7 @@ namespace BTMAppUI.Data.Models
 {
     public class ProductModel
     {
+        public int Product_Id { get; set; }
         [Required]
         [StringLength(100, ErrorMessage = "Product Name is too long.")]
         [MinLength(5, ErrorMessage = "Product Name is too short.")]

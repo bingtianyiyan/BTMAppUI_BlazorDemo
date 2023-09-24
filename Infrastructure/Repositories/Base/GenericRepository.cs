@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Infrastructure.Repositories.Generics
 {
+	//Uses Polymorphism and interface inheritance
 	public abstract class GenericRepository<T> : IRepository<T> where T : class
 	{
 		private readonly ISQLDataAccess _db;
@@ -22,7 +23,7 @@ namespace Infrastructure.Repositories.Generics
 			throw new NotImplementedException();
 		}
 
-		public virtual void Delete(int id)
+		public virtual Task Delete(int id)
 		{
 			throw new NotImplementedException();
 		}
@@ -42,7 +43,7 @@ namespace Infrastructure.Repositories.Generics
 			throw new NotImplementedException();
 		}
 
-		public virtual void Update(T entity)
+		public virtual Task Update(T entity)
 		{
 			throw new NotImplementedException();
 		}

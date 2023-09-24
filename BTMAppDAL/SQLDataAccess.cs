@@ -32,7 +32,7 @@ namespace DAL
             }
         }
 
-        public async Task SaveData<T>(string sql, T parameters)
+        public async Task InsertData<T>(string sql, T parameters)
         {
             string connectionString = _config.GetConnectionString(ConnectionStringName);
 
@@ -51,5 +51,15 @@ namespace DAL
 				await connection.ExecuteAsync(sql, parameters);
 			}
 		}
-    }
+
+		public async Task UpdateData<T>(string sql, T parameters)
+		{
+			string connectionString = _config.GetConnectionString(ConnectionStringName);
+
+			using (IDbConnection connection = new SqlConnection(connectionString))
+			{
+				await connection.ExecuteAsync(sql, parameters);
+			}
+		}
+	}
 }

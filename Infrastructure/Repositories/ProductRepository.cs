@@ -39,7 +39,7 @@ namespace Infrastructure.Repositories
 						  ,@Subcategory_id
 						  ,@category_id);";
 
-			return _db.SaveData(sql, product);
+			return _db.InsertData(sql, product);
 		}
 
 		public override Task<List<Product>> All()
@@ -51,11 +51,29 @@ namespace Infrastructure.Repositories
 
         }
 
-		public override void Delete(int id)
+		public override Task Delete(int id)
 		{
 			string sql = $"DELETE FROM dbo.Products WHERE Product_Id =" + id;
-			var products = _db.DeleteData(sql, id);
+			_db.DeleteData(sql, id);
+			return Task.CompletedTask;
+		}
 
+		public override Task Update(Product product)
+		{
+			string sql = @"UPDATE dbo.Products
+						SET 
+						  [Product_Name] =   @Product_Name,
+                          [Price]			=  @Price,
+                          [Date_Added]		=  @Date_Added,
+                          [Date_Modified]	=  @Date_Modified,
+                          [Description]		=  @Description,
+                          [QuantityPerUnit]	=  @QuantityPerUnit,
+                          [Date_Removed]	=  @Date_Removed,
+						  [Subcategory_id]	=  @Subcategory_id,
+						  [category_id] 	=  @category_id
+						WHERE Product_Id = " + product.Product_Id;
+
+			return _db.InsertData(sql, product);
 		}
 	}
 }

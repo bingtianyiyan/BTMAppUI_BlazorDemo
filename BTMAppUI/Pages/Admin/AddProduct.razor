@@ -8,36 +8,6 @@
 @inject IProductService productRepository
 <h3>AddProduct</h3>
 
-@code {
-	private ProductModel product = new ProductModel();
-	private List<Product> products;
-	protected override async Task OnInitializedAsync()
-	{
-		products = await productRepository.GetProducts();
-	}
-
-	private async Task AddNewProduct()
-	{
-		Product p = new Product
-			{
-				Product_Name = product.Product_Name,
-				Price = product.Price
-			};
-
-		await productRepository.AddProduct(p);
-
-		product = new ProductModel();
-		products = await productRepository.GetProducts();
-	}
-
-	private async Task Delete_Click(int id)
-	{
-		await productRepository.Delete(id);
-		Product product = products.Where(x=>x.Product_Id == id).FirstOrDefault();
-		products.Remove(product);
-	}
-}
-
 <EditForm Model="@product" OnValidSubmit="@AddNewProduct">
 	<DataAnnotationsValidator />
 	<ValidationSummary />
@@ -48,36 +18,83 @@
 	<input type="submit" value="Submit" class="btn btn-primary" />
 </EditForm>
 
+<div class="row">
+	@*First column*@
+	<div class="column">
+		@if (products is null)
+		{
+			<p><em>Loading...</em></p>
+		}
+		else
+		{
+			<table>
+				<thead>
+					<tr>
+						<th>Product Id</th>
+						<th>Product Name</th>
+						<th>Product Price</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var product in products)
+					{
+						<tr>
+							<td>@product.Product_Id</td>
+							<td>@product.Product_Name</td>
+							<td>@Math.Round((decimal)@product.Price, 2)</td>
+							<td>
+								<button class="btn btn-secondary" type="button" @onclick="() => SelectProduct_Click(product.Product_Id)">
+									Select
+								</button>
+							</td>
+							<td>
+								<button class="btn btn-danger" type="button" @onclick="() => Delete_Click(product.Product_Id)">
+									Delete
+								</button>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		}
 
-@if (products is null)
-{
-	<p><em>Loading...</em></p>
-}
-else
-{
-	<table>
-		<thead>
-			<tr>
-				<th>Product Id</th>
-				<th>Product Name</th>
-				<th>Product Price</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var product in products)
-			{
-				<tr>
-					<td>@product.Product_Id</td>
-					<td>@product.Product_Name</td>
-					<td>@product.Price</td>
-					<td>
-						<button class="btn btn-danger" type="button" @onclick="() => Delete_Click(product.Product_Id)">
-							Delete
-						</button>
-					</td>
-				</tr>
-			}
-		</tbody>
-	</table>
+	</div>
+	@*Second Column*@
+	<div class="column">
+		@if (productUpdate is null)
+		{
+			<p><em>Select to view product...</em></p>
+		}
+		else
+		{
+			<EditForm Model="@productUpdate">
+				<DataAnnotationsValidator />
+				<ValidationSummary />
+				<h3>Edit Product</h3>
+				<hr />
+				<div class="form-group row">
+					<label for="lastName" class="col-sm-2 col-form-label">
+						Last Name
+					</label>
+					<div class="col-sm-10">
+						<InputText id="Product_Name" class="form-control" placeholder="Last Name"
+							   @bind-Value="@productUpdate.Product_Name" />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="lastName" class="col-sm-2 col-form-label">
+						Last Name
+					</label>
+					<div class="col-sm-10">
+						<InputNumber id="Product_Name" class="form-control" placeholder="Last Name"
+							   @bind-Value="@productUpdate.Price" />
+					</div>
+				</div>
+				<button class="btn btn-danger" type="button" @onclick="() => UpdateProduct_Click(productUpdate)">
+					Update
+				</button>
+			</EditForm>
+		}
+	</div>
+</div>
 
-}
