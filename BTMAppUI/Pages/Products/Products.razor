@@ -5,8 +5,24 @@
 @using DAL.Contracts;
 @using DAL.Models
 
-@inject IProductService _db
-<h3>Products</h3>
+@inject IProductService productService
+
+@code {
+	private List<Product> products;
+	private string searchKeyword;
+	protected override async Task OnInitializedAsync()
+	{
+		products = await productService.GetProducts();
+	}
+
+	protected async Task SearchProducts(string keyword)
+	{
+		if (!string.IsNullOrEmpty(keyword))
+			products = await productService.SearchProducts(keyword);
+		else
+			return;
+	}
+}
 
 @if (products is null)
 {
@@ -14,6 +30,14 @@
 }
 else
 {
+	<section class="py-5 text-center container">
+		<div class="col-lg-8 mx-auto">
+			<EditForm Model="@products" OnSubmit="() => SearchProducts(searchKeyword)" style="margin:auto;max-width:300px" class="searchProduct">
+				<input type="text" placeholder="Search.." name="search" @bind-value="@searchKeyword">
+				<button type="button" @onclick="() => SearchProducts(searchKeyword)"><i class="fa fa-search"></i></button>
+			</EditForm>
+		</div>
+	</section>
 	<!-- CAROUSEL START-->
 	<section class="py-5 text-center container">
 		<div class="col-lg-8 mx-auto">
@@ -24,9 +48,9 @@ else
 	</section>
 	<!-- CAROUSEL END-->
 	<div class="row">
-	@foreach (var product in products)
-	{
-		
+		@foreach (var product in products)
+		{
+
 			<!--cards-->
 			<div class="col-md-3">
 				<figure class="card card-product rounded-0 border-0" style="height: 500px;">
@@ -45,15 +69,9 @@ else
 					</div> <!-- bottom-wrap.// -->
 				</figure>
 			</div>
-	}
+		}
 	</div>
 }
-@code {
-	private List<Product> products;
-	protected override async Task OnInitializedAsync()
-	{
-		products = await _db.GetProducts();
-	}
-}
+
 
 

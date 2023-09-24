@@ -8,5 +8,6 @@ namespace DAL.Contracts
         Task<List<Product>> GetProducts();
         Task Delete(int id);
 		Task Update(Product product);
+        Task<List<Product>> SearchProducts(string keyword);
 	}
 }

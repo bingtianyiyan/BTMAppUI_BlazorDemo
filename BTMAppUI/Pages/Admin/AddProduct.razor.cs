@@ -17,6 +17,7 @@ using DAL;
 using DAL.Contracts;
 using DAL.Models;
 using BTMAppUI.Data.Models;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace BTMAppUI.Pages.Admin
 {
@@ -25,9 +26,10 @@ namespace BTMAppUI.Pages.Admin
         private ProductModel product = new ProductModel();
         private ProductModel productUpdate;
 		private List<Product> products;
-        protected override async Task OnInitializedAsync()
+		private string searchKeyword { get; set; }  
+		protected override async Task OnInitializedAsync()
         {
-            products = await productRepository.GetProducts();
+            products = await productService.GetProducts();
         }
 
         private async Task AddNewProduct()
@@ -37,16 +39,18 @@ namespace BTMAppUI.Pages.Admin
                 Product_Name = product.Product_Name,
                 Price = product.Price
             };
-            await productRepository.AddProduct(p);
+            await productService.AddProduct(p);
             product = new ProductModel();
-            products = await productRepository.GetProducts();
+            products = await productService.GetProducts();
         }
 
         private async Task Delete_Click(int id)
         {
-            await productRepository.Delete(id);
+            await productService.Delete(id);
             Product product = products.Where(x => x.Product_Id == id).FirstOrDefault();
             products.Remove(product);
+
+
         }
 
         private async Task UpdateProduct_Click(ProductModel productUpdate)
@@ -57,10 +61,15 @@ namespace BTMAppUI.Pages.Admin
 				Price = productUpdate.Price,
                 Product_Id = productUpdate.Product_Id
 			};
-            await productRepository.Update(p);
+            await productService.Update(p);
 
-			//refresh list
-			products = await productRepository.GetProducts();
+            //refresh list
+            if (string.IsNullOrEmpty(searchKeyword))
+                products = await productService.GetProducts();
+            else
+                SearchProducts(searchKeyword);
+
+
 		}
         private async Task SelectProduct_Click(int id)
         {
@@ -72,5 +81,13 @@ namespace BTMAppUI.Pages.Admin
                 Product_Id = productSelected.Product_Id
             };
 		}
-    }
+
+		protected async Task SearchProducts(string keyword)
+		{
+			if (!string.IsNullOrEmpty(keyword))
+				products = await productService.SearchProducts(keyword);
+			else
+				return;
+		}
+	}
 }

@@ -1,12 +1,12 @@
-﻿.row {
-    display: flex;
+﻿body {
+    font-family: Arial;
 }
 
-.column {
-    flex: 50%;
+* {
+    box-sizing: border-box;
 }
 
-.searchProduct input[type=text] {
+form.searchProduct input[type=text] {
     padding: 10px;
     font-size: 17px;
     border: 1px solid grey;
@@ -15,7 +15,7 @@
     background: #f1f1f1;
 }
 
-.searchProduct button {
+form.searchProduct button {
     float: left;
     width: 20%;
     padding: 10px;
@@ -27,11 +27,11 @@
     cursor: pointer;
 }
 
-    .searchProduct button:hover {
+    form.searchProduct button:hover {
         background: #2e2c2c
     }
 
-.searchProduct::after {
+form.searchProduct::after {
     content: "";
     clear: both;
     display: table;

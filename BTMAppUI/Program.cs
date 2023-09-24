@@ -2,7 +2,8 @@ using BTMAppUI.Areas.Identity;
 using DAL;
 using DAL.Contracts;
 using DAL.Models;
-using Infrastructure.Repositories;
+using Infrastructure.Repositories.Base;
+using Infrastructure.Repositories.ProductRepo;
 using Infrastructure.Service;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BTMAppUI
 {
-	public class Program
+    public class Program
     {
         public static void Main(string[] args)
         {

@@ -34,26 +34,32 @@ namespace DAL
 
         public async Task InsertData<T>(string sql, T parameters)
         {
-            string connectionString = _config.GetConnectionString(ConnectionStringName);
-
-            using (IDbConnection connection = new SqlConnection(connectionString))
-            {
-                await connection.ExecuteAsync(sql, parameters);
-            }
-        }
+			await Save(sql, parameters);
+		}
 
         public async Task DeleteData<T>(string sql, T parameters)
+        {
+			await Save(sql, parameters);
+		}
+
+		public async Task UpdateData<T>(string sql, T parameters)
+		{
+            await Save(sql, parameters);
+		}
+
+        public async Task<List<T>> SearchData<T, U>(string sql, U parameters)
         {
 			string connectionString = _config.GetConnectionString(ConnectionStringName);
 
 			using (IDbConnection connection = new SqlConnection(connectionString))
 			{
-				await connection.ExecuteAsync(sql, parameters);
+				var data = await connection.QueryAsync<T>(sql, parameters);
+				return data.ToList();
 			}
 		}
 
-		public async Task UpdateData<T>(string sql, T parameters)
-		{
+		private async Task Save<T>(string sql, T parameters)
+        {
 			string connectionString = _config.GetConnectionString(ConnectionStringName);
 
 			using (IDbConnection connection = new SqlConnection(connectionString))

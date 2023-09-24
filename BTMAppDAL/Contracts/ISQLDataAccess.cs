@@ -8,5 +8,6 @@
         Task InsertData<T>(string sql, T parameters);
         Task DeleteData<T>(string sql, T parameters);
 		Task UpdateData<T>(string sql, T parameters);
+		Task<List<T>> SearchData<T, U>(string sql, U parameters);
 	}
 }
