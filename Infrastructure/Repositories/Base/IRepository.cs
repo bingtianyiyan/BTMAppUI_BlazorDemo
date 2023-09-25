@@ -12,6 +12,7 @@ namespace Infrastructure.Repositories.Base
         Task<List<T>> All();
         IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
         void SaveChanges();
-		Task<List<Product>> SearchData(string keyword);
+        Task<List<Product>> SearchData(string keyword);
+        Task<T> GetData(int id);
     }
 }

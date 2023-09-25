@@ -54,5 +54,10 @@ namespace Infrastructure.Repositories.Generics
 		{
 			throw new NotImplementedException();
 		}
-	}
+
+        public virtual Task<T> GetData(int id)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

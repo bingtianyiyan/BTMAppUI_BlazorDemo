@@ -1,0 +1,124 @@
+﻿@page "/Admin/AddAndModifyProduct"
+
+@using DAL
+@using DAL.Contracts;
+@using DAL.Models
+@using BTMAppUI.Data.Models
+
+@inject IProductService productService
+
+
+<section class="py-5 text-center container">
+	<div class="col-lg-8 mx-auto">
+		<div class="searchProduct" style="margin:auto;max-width:300px" @onclick="() => SearchProducts(SearchKeyword)">
+			<input type="text" placeholder="Search.." name="search" @bind-value="@SearchKeyword" @onkeydown="@Enter">
+			<button type="button" @onclick="() => SearchProducts(SearchKeyword)"><i class="fa fa-search"></i></button>
+		</div>
+	</div>
+</section>
+<div class="row align-items-start">
+	<div class="col col-6 border vh-50 overflow-hidden p-4 m-2 content m-auto">
+		<h3>AddProduct</h3>
+
+		<EditForm Model="@product" OnValidSubmit="@AddNewProduct">
+			<DataAnnotationsValidator />
+			<ValidationSummary />
+
+			<InputText id="Product_Name" @bind-Value="product.Product_Name" />
+			<InputNumber id="Price" @bind-Value="product.Price" />
+
+			<input type="submit" value="Submit" class="btn btn-primary" />
+		</EditForm>
+
+		<div class="row">
+			@*First column*@
+			<div class="column">
+				@if (products is null)
+				{
+					<p><em>Loading...</em></p>
+				}
+				else
+				{
+					<table>
+						<thead>
+							<tr>
+								<th>Product Id</th>
+								<th>Product Name</th>
+								<th>Product Price</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var product in products)
+							{
+								<tr>
+									<td>@product.Product_Id</td>
+									<td>@product.Product_Name</td>
+									<td>@Math.Round((decimal)@product.Price, 2)</td>
+									<td>
+										<button class="btn btn-secondary" type="button" @onclick="() => SelectProduct_Click(product.Product_Id)">
+											Modify
+										</button>
+									</td>
+									<td>
+										<button class="btn btn-danger" type="button" @onclick="() => Delete_Click(product.Product_Id)">
+											Delete
+										</button>
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				}
+				<span>@SearchReturnMessage</span>
+			</div>
+		</div>
+	</div>
+	@*Second Column*@
+	<div class="col col-5 border vh-50 overflow-hidden p-4 m-2 content m-auto">
+		@if (productUpdate is null)
+		{
+			<p><em>Select to view product...</em></p>
+		}
+		else
+		{
+			<EditForm Model="@productUpdate">
+				<DataAnnotationsValidator />
+				<ValidationSummary />
+				<h3>Edit Product</h3>
+				<hr />
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">
+						Product Name
+					</label>
+					<div class="col-sm-6 mb-2">
+						<InputText id="Product_Name" class="form-control" placeholder="Last Name"
+							   @bind-Value="@productUpdate.Product_Name" />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">
+						Price
+					</label>
+					<div class="col-sm-6">
+						<InputNumber id="Product_Name" class="form-control" placeholder="Last Name"
+								 @bind-Value="@productUpdate.Price" />
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-4 col-form-label">
+						<button class="btn btn-danger" type="button" @onclick="() => UpdateProduct_Click(productUpdate)">
+							Update
+						</button>
+					</div>
+					<div class="col-sm-6 mt-3">
+						<span class="text-success"><em>@ReturnMessage</em></span>
+					</div>
+				</div>
+			</EditForm>
+		}
+	</div>
+</div>
+
+
+
+

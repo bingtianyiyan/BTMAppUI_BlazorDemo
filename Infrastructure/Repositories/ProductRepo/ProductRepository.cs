@@ -50,6 +50,7 @@ namespace Infrastructure.Repositories.ProductRepo
             return products;
         }
 
+        
         public override Task Delete(int id)
         {
             string sql = $"DELETE FROM dbo.Products WHERE Product_Id =" + id;
@@ -82,5 +83,13 @@ namespace Infrastructure.Repositories.ProductRepo
 			var products = _db.SearchData<Product, dynamic>(sql, new { });
 			return products;
 		}
-	}
+
+        public override Task<Product> GetData(int id)
+        {
+            string sql = $"SELECT * FROM dbo.Products p WHERE p.Product_Id =" + id + " ORDER BY Product_Id DESC";
+
+            var product = _db.GetData<Product, dynamic>(sql, new { });
+            return product;
+        }
+    }
 }

@@ -5,7 +5,9 @@
 .column {
     flex: 50%;
 }
-
+.content{
+    height: 550px;
+}
 .searchProduct input[type=text] {
     padding: 10px;
     font-size: 17px;

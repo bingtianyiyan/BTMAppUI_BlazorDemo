@@ -1,0 +1,43 @@
+﻿@page "/Search/Search"
+
+@using DAL
+@using DAL.Contracts;
+@using DAL.Models
+@using BTMAppUI.Data.Models
+
+@inject IProductService productService
+<h3>Search</h3>
+
+@code {
+	private ProductModel product = new ProductModel();
+	private ProductModel productUpdate;
+	private List<Product> products;
+
+	public string ReturnMessage { get; set; }
+	public string SearchReturnMessage { get; set; }
+	private string SearchKeyword { get; set; }
+
+	protected async Task SearchProducts(string keyword)
+	{
+		SearchReturnMessage = string.Empty;
+		products = await productService.SearchProducts(keyword);
+		if (!products.Any())
+			SearchReturnMessage = "No results found.";
+	}
+
+	public void Enter(KeyboardEventArgs e)
+	{
+		if (e.Code == "Enter" || e.Code == "NumpadEnter")
+		{
+			return;
+		}
+	}
+}
+<section class="py-5 text-center container">
+	<div class="col-lg-8 mx-auto">
+		<div class="searchProduct" style="margin:auto;max-width:300px" @onclick="() => SearchProducts(SearchKeyword)">
+			<input type="text" placeholder="Search.." name="search" @bind-value="@SearchKeyword" @onkeydown="@Enter">
+			<button type="button" @onclick="() => SearchProducts(SearchKeyword)"><i class="fa fa-search"></i></button>
+		</div>
+	</div>
+</section>

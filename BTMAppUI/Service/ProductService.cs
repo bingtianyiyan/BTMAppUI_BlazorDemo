@@ -42,10 +42,15 @@ namespace Infrastructure.Service
 			return Task.FromResult("Product was successfully removed.");
 		}
 
-		public Task Update(Product product)
+		public Task<string> Update(Product product)
 		{
 			_productRepository.Update(product);
 			return Task.FromResult("Product was successfully updated.");
 		}
-	}
+
+        public Task<Product> GetProduct(int product_Id)
+        {
+            return _productRepository.GetData(product_Id);
+        }
+    }
 }

@@ -6,10 +6,12 @@
 @using DAL.Models
 
 @inject IProductService productService
-
+@inject NavigationManager NavigationManager
 @code {
 	private List<Product> products;
 	private string searchKeyword;
+	public string SearchReturnMessage { get; set; }
+	private string SearchKeyword { get; set; }
 	protected override async Task OnInitializedAsync()
 	{
 		products = await productService.GetProducts();
@@ -17,10 +19,23 @@
 
 	protected async Task SearchProducts(string keyword)
 	{
-		if (!string.IsNullOrEmpty(keyword))
-			products = await productService.SearchProducts(keyword);
-		else
+		SearchReturnMessage = string.Empty;
+		products = await productService.SearchProducts(keyword);
+		if (!products.Any())
+			SearchReturnMessage = "No results found.";
+	}
+
+	public void Enter(KeyboardEventArgs e)
+	{
+		if (e.Code == "Enter" || e.Code == "NumpadEnter")
+		{
 			return;
+		}
+	}
+
+	protected void ProductDetails(int product_Id)
+	{
+		NavigationManager.NavigateTo("/Products/ProductDetails/" + product_Id);
 	}
 }
 
@@ -56,14 +71,14 @@ else
 				<figure class="card card-product rounded-0 border-0" style="height: 500px;">
 					<div class="col-md-12 img-fluid">
 
-						<img class="img-fluid" src="https://cb.scene7.com/is/image/Crate/FauxBoisMelDinnerPltSSS21/$web_pdp_main_carousel_med$/201215170032/faux-bois-melamine-dinner-plate.jpg">
+						<img class="img-fluid" @onclick="() => ProductDetails(product.Product_Id)" src="https://cb.scene7.com/is/image/Crate/FauxBoisMelDinnerPltSSS21/$web_pdp_main_carousel_med$/201215170032/faux-bois-melamine-dinner-plate.jpg">
 						@*<img [src]="product?.images[0]?.convertedProductImage || '../../assets/default-image.png'" class="img-fluid" />*@
 					</div>
 					<div class="bottom-wrap text-center mt-3">
 						<span class="small">New Arrival</span>
 						<h5 class="title">@product.Product_Name</h5>
 						<div class="price-wrap h6">
-							<span class="price-new">@product.Price</span> <br>
+							<span class="price-new">@Math.Round((decimal)product.Price, 2)</span> <br>
 							<del class="text-muted"> $1980</del>
 						</div> <!-- price-wrap.// -->
 					</div> <!-- bottom-wrap.// -->

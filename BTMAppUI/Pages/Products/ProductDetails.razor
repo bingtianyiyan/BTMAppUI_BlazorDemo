@@ -1,0 +1,108 @@
+﻿@page "/Products/ProductDetails/{Product_Id:int}"
+@using DAL
+@using DAL.Contracts;
+@using DAL.Models
+
+@inject IProductService productService
+
+<h3>ProductDetails</h3>
+
+@code {
+    [Parameter]
+    public int Product_Id { get; set; }
+
+    protected Product product;
+
+    protected override async Task OnInitializedAsync()
+    {
+        product = await productService.GetProduct(Product_Id);
+    }
+}
+
+@if (product is null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+<div class="container mt-5 mb-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="thumbnail text-center">
+                           @* <ng-container *ngFor="let image of imageList">
+                                <div class="col-md-5 m-2">
+                                    <img [src]="image?.convertedProductImage" class="img-fluid" [alt]="image.productId" (click)="onSelectImage(image)" />
+                                </div>
+                            </ng-container>*@
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="images">
+                            <div class="text-center">
+                                @*<img [src]="productDetail?.images[0]?.convertedProductImage || '../../assets/default-image.png'" class="img-fluid zoom" />*@
+                            </div>
+                            <!-- <div class="thumbnail text-center">
+                                <ng-container *ngFor="let image of imageList">
+                                    <div class="col-md-5 m-2">
+                                      <img [src]="image?.convertedProductImage" class="col-md-5" [alt]="image.productId" />
+                                    </div>
+                              </ng-container>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="product p-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa fa-long-arrow-left"></i>
+                                    <a class="link" (click)="goBack()">Back</a>
+                                </div>
+                                <i class="fa fa-shopping-cart text-muted"></i>
+                            </div>
+                            <div class="mt-4 mb-3">
+                                <span class="text-uppercase text-muted brand">Category Name : SubCategory</span>
+                                <h5 class="text-uppercase">@product.Product_Name</h5>
+                                <div class="price d-flex flex-row align-items-center">
+                                    <span class="act-price">$@Math.Round((decimal)product.Price, 2)</span>
+                                    <div class="ml-2"> <small class="dis-price">$59</small> <span>40% OFF</span> </div>
+                                </div>
+                            </div>
+                            <p class="about">Description HERE</p>
+                            <div class="sizes mt-5">
+                                <h6 class="text-uppercase">Size</h6>
+                                <label class="radio">
+                                    <input type="radio" name="size" value="S" checked>
+                                    <span>S</span>
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="size" value="M">
+                                    <span>M</span>
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="size" value="L"> <span>L</span>
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="size" value="XL">
+                                    <span>
+                                        XL
+                                    </span>
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="size" value="XXL">
+                                    <span>
+                                        XXL
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="cart mt-4 align-items-center"> <button class="btn btn-danger text-uppercase mr-2 px-4">Add to cart</button> <i class="fa fa-heart text-muted"></i> <i class="fa fa-share-alt text-muted"></i> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
