@@ -8,6 +8,7 @@
 @inject IProductService productService
 @inject NavigationManager NavigationManager
 @code {
+	private Task<AuthenticationState> authenticationState { get; set; }
 	private List<Product> products;
 	private string searchKeyword;
 	public string SearchReturnMessage { get; set; }

@@ -1,5 +1,5 @@
 ﻿@page "/Reports/Reports"
-
+@attribute [Authorize(Roles = "Administrator")]
 @using BTMAppUI.Data.Enums;
 @using BTMAppUI.Data.Models;
 @using DAL

@@ -1,17 +1,18 @@
 ﻿using DAL.Contracts;
 using DAL.Models;
-using Infrastructure.Repositories.Generics;
+using Infrastructure.Repositories.Base;
+using System.Linq.Expressions;
 
 namespace Infrastructure.Repositories.ProductRepo
 {
     /*
 	 B - Class Inheritance and Polymorphism
 	 */
-    public class ProductRepository : GenericRepository<Product>
-    {
+    public class ProductRepository : IProductRepository
+	{
         private readonly ISQLDataAccess _db;
 
-        public ProductRepository(ISQLDataAccess db) : base(db)
+        public ProductRepository(ISQLDataAccess db)
         {
             _db = db;
         }
@@ -20,7 +21,7 @@ namespace Infrastructure.Repositories.ProductRepo
         /// </summary>
         /// <param name="product"></param>
         /// <returns></returns>
-        public override Task Add(Product product)
+        public Task Add(Product product)
         {
             string sql = @"INSERT INTO dbo.Products ([Product_Name]
                           ,[Price]
@@ -48,7 +49,7 @@ namespace Infrastructure.Repositories.ProductRepo
         /// Get all products from database through supplied query.
         /// </summary>
         /// <returns></returns>
-        public override Task<List<Product>> All()
+        public Task<List<Product>> All()
         {
             string sql = "SELECT * FROM dbo.Products ORDER BY Product_Id DESC";
 
@@ -61,7 +62,7 @@ namespace Infrastructure.Repositories.ProductRepo
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public override Task Delete(int id)
+        public Task Delete(int id)
         {
             string sql = $"DELETE FROM dbo.Products WHERE Product_Id =" + id;
             _db.DeleteData(sql, id);
@@ -72,7 +73,7 @@ namespace Infrastructure.Repositories.ProductRepo
         /// </summary>
         /// <param name="product"></param>
         /// <returns></returns>
-        public override Task Update(Product product)
+        public Task Update(Product product)
         {
             string sql = @"UPDATE dbo.Products
 						SET 
@@ -94,7 +95,7 @@ namespace Infrastructure.Repositories.ProductRepo
         /// </summary>
         /// <param name="keyword"></param>
         /// <returns></returns>
-		public override Task<List<Product>> SearchData(string keyword)
+		public Task<List<Product>> SearchData(string keyword)
 		{
 			string sql = $"SELECT * FROM dbo.Products p WHERE p.Product_Name LIKE '%" + keyword + "%' ORDER BY Product_Id DESC";
 
@@ -106,7 +107,7 @@ namespace Infrastructure.Repositories.ProductRepo
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public override Task<Product> GetData(int id)
+        public Task<Product> Get(int id)
         {
             string sql = $"SELECT * FROM dbo.Products p WHERE p.Product_Id =" + id + " ORDER BY Product_Id DESC";
 
@@ -114,7 +115,7 @@ namespace Infrastructure.Repositories.ProductRepo
             return product;
         }
 
-        public override Task<List<MonthlyReport>> GetMonthlyReports()
+        public Task<List<MonthlyReport>> GetMonthlyReports()
         {
             string sql = "SELECT COUNT(Product_Id) ProductCounts, SUM(p.Price) TotalAmount, Month(Date_Added) 'Month' " +         
                 "FROM Products p " +
@@ -125,12 +126,21 @@ namespace Infrastructure.Repositories.ProductRepo
             return products;
 		}
 
-        public override Task<string> GetLastReportRun()
+        public Task<string> GetLastReportRun()
         {
             string sql = "SELECT TOP 1 CreationDate FROM MonthlyReportAuditLog al ORDER BY Id DESC";
 			var lastAuditDate = _db.GetData<string, dynamic>(sql, new { });
 			return lastAuditDate;
 		}
 
+		public IEnumerable<Product> Find(Expression<Func<Product, bool>> predicate)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SaveChanges()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

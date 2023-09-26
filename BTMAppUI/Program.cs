@@ -1,18 +1,19 @@
-using BTMAppUI.Areas.Identity;
+using BTMAppUI.Data.Authentication;
+using BTMAppUI.Service;
 using DAL;
 using DAL.Contracts;
 using DAL.Models;
+using Infrastructure.Repositories.AccountRepo;
 using Infrastructure.Repositories.Base;
-using Infrastructure.Repositories.Generics;
 using Infrastructure.Repositories.ProductRepo;
 using Infrastructure.Service;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BTMAppUI
 {
-    public class Program
+	public class Program
     {
         public static void Main(string[] args)
         {
@@ -27,11 +28,24 @@ namespace BTMAppUI
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
+			builder.Services.AddScoped<ProtectedSessionStorage>();
 			builder.Services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Shared");
-			builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             builder.Services.AddTransient<ISQLDataAccess, SQLDataAccess>();
             builder.Services.AddTransient<IProductService, ProductService>();
-			builder.Services.AddTransient<GenericRepository<Product>, ProductRepository>();
+			builder.Services.AddTransient<IProductRepository, ProductRepository>();
+           
+            builder.Services.AddTransient<IUserAccountService, UserAccountService>();
+			builder.Services.AddTransient<IUserAccountRepository, UserAccountRepository>();
+			builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+			builder.Services.AddAuthorization(options =>
+			{
+				options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Administrator"));
+			});
+
+			builder.Services.ConfigureApplicationCookie(options =>
+			{
+				options.AccessDeniedPath = "/accessdenied";
+			});
 
 			var app = builder.Build();
 

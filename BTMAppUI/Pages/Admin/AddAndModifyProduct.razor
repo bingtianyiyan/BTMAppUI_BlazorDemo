@@ -1,5 +1,5 @@
 ﻿@page "/Admin/AddAndModifyProduct"
-
+@attribute [Authorize(Roles = "Administrator")]
 @using DAL
 @using DAL.Contracts;
 @using DAL.Models

@@ -1,6 +1,7 @@
-﻿
+﻿@using BTMAppUI.Data.Authentication
 @inherits LayoutComponentBase
-
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navManager
 <PageTitle>BTMAppUI</PageTitle>
 
 <div class="page">
@@ -17,15 +18,23 @@
 						<div class="col-4 text-center">
 							<nav class="nav mx-auto fw-bold text-white">
 								<a class="p-2 link-light text-white text-decoration-none" href="/Products/Products">Home</a>
-								<a class="p-2 link-light text-white text-decoration-none" href="/Admin/AddAndModifyProduct">Manage Products</a>
-								<a class="p-2 link-light text-white text-decoration-none" href="/Reports/Reports">Reports</a>
+								<AuthorizeView Roles="Administrator">
+									<Authorized>
+										<a class="p-2 link-light text-white text-decoration-none" href="/Admin/AddAndModifyProduct">Manage Products</a>
+										<a class="p-2 link-light text-white text-decoration-none" href="/Reports/Reports">Reports</a>
+									</Authorized>
+								</AuthorizeView>
 							</nav>
 						</div>
 						<div class="col-4 d-flex justify-content-end align-items-center">
 							<AuthorizeView>
+								<Authorized>
+									<span class="text-white">Hello, <b>@context.User.Identity.Name</b>!</span>
+									<a class="p-2 link-light text-white text-decoration-none" @onclick="Logout" href="javascript:void(0)">Logout</a>
+								</Authorized>
 								<NotAuthorized>
 									<a class="btn btn-sm btn-outline-secondary me-1" href="Identity/Account/Register">Register</a>
-									<a class="btn btn-sm btn-outline-secondary" href="Identity/Account/Login">Log in</a>
+									<a class="btn btn-sm btn-outline-secondary" href="/Login/Login">Log in</a>
 								</NotAuthorized>
 							</AuthorizeView>
 						</div>
@@ -38,3 +47,11 @@
 		</article>
 	</main>
 </div>
+@code {
+	private async Task Logout()
+	{
+		var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+		await customAuthStateProvider.UpdateAuthenticationState(null);
+		navManager.NavigateTo("/", true);
+	}
+}
