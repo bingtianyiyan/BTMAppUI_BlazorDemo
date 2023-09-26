@@ -8,7 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Pages\Reports\Reports.razor.css" />
     <None Remove="Pages\yyrdltlf.g2x~" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Pages\Reports\Reports.razor.css" />
   </ItemGroup>
 
   <ItemGroup>

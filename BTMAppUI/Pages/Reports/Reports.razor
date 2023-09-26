@@ -1,0 +1,187 @@
+﻿@page "/Reports/Reports"
+
+@using BTMAppUI.Data.Enums;
+@using BTMAppUI.Data.Models;
+@using DAL
+@using DAL.Contracts;
+@using DAL.Models
+@using Microsoft.JSInterop
+
+@inject IProductService productService
+@inject IJSRuntime JSRuntime
+<div class="text-center m-5">
+	<h5>Reports</h5>
+</div>
+
+
+@code {
+	protected List<Product> products;
+	protected List<MonthlyReport> monthlyReport = new List<MonthlyReport>();
+	protected string LastReportRunResult { get; set; }
+	protected int TotalOrders
+	{
+		get
+		{
+			return 0;
+		}
+	}
+	protected int TotalCount
+	{
+		get
+		{
+			return GetTotalCount();
+		}
+	}
+	protected override async Task OnInitializedAsync()
+	{
+		products = await productService.GetProducts();
+
+		await GetLastReportRun();
+	}
+
+	//REPORT By Monthy
+	protected async Task ProductsAddedByMonthReport()
+	{
+		monthlyReport = await productService.GetMonthlyReports();
+		await GetLastReportRun();
+	}
+
+	protected int GetTotalCount()
+	{
+		return products.Count();
+	}
+
+	protected string GetMonthName(int month)
+	{
+		string monthName = string.Empty;
+		foreach (Month name in Enum.GetValues(typeof(Month)))
+		{
+			switch (month)
+			{
+				case (int)Month.January:
+					monthName = Month.January.ToString();
+					break;
+				case (int)Month.February:
+					monthName = Month.February.ToString();
+					break;
+				case (int)Month.March:
+					monthName = Month.March.ToString();
+					break;
+				case (int)Month.April:
+					monthName = Month.April.ToString();
+					break;
+				case (int)Month.May:
+					monthName = Month.May.ToString();
+					break;
+				case (int)Month.June:
+					monthName = Month.June.ToString();
+					break;
+				case (int)Month.July:
+					monthName = Month.July.ToString();
+					break;
+				case (int)Month.August:
+					monthName = Month.August.ToString();
+					break;
+				case (int)Month.September:
+					monthName = Month.September.ToString();
+					break;
+				case (int)Month.October:
+					monthName = Month.October.ToString();
+					break;
+				case (int)Month.November:
+					monthName = Month.November.ToString();
+					break;
+				case (int)Month.December:
+					monthName = Month.December.ToString();
+					break;
+			}
+		}
+
+		return monthName;
+	}
+
+	protected async Task GetLastReportRun()
+	{
+		string auditResult = await productService.GetLastReportRun();
+		LastReportRunResult = string.Empty;
+		LastReportRunResult = ConvertToTimeZone(auditResult);
+	}
+
+	public static string ConvertToTimeZone(string dateTime)
+	{
+		DateTime utcDateTime = DateTime.Parse(dateTime.ToString());
+		DateTime localDateTime = utcDateTime.ToLocalTime();
+
+		return localDateTime.ToString("MM/dd/yyyy hh:mm tt");
+	}
+
+}
+@if (products is null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+
+	<div class="container">
+		<div class="column left">
+			<ul class="unorderedlist mt-4">
+				<li class="list"><span>Monthly Products Report: </span><button type="button" class="productsAddedByMonthLink" @onclick="() => ProductsAddedByMonthReport()">Generate</button></li>
+				<li class="list"><span class="totalExpectedRevenueLink">Products By Status</span></li>
+			</ul>
+			<div>
+				Results:
+				<ul class="unorderedResult mt-2">
+					<b>Total Stocks:</b> @TotalCount
+					<br />
+					<b>Total Orders:</b> @TotalOrders
+					<br />
+					<b>Last Report Run:</b> @LastReportRunResult
+				</ul>
+			</div>
+		</div>
+		<div class="column right">
+			<div class="row">
+				@*First column*@
+				<div class="column">
+					<div class="table-container shadow border  p-3">
+						@if (!monthlyReport.Any())
+						{
+							<p><em>No report is generated.</em></p>
+						}
+						else
+						{
+							<h5>Products Added By Month</h5>
+							<table class="table table-striped mb-3">
+								<thead>
+									<tr>
+										<th class="col-sm-2">Month</th>
+										<th class="col">Product Counts</th>
+										<th class="col">Total Amount</th>
+										<th class="col">Timestamp</th>
+									</tr>
+								</thead>
+								<tbody>
+
+									@foreach (var report in monthlyReport)
+									{
+										<tr>
+											<td>@GetMonthName(@report.Month)</td>
+											<td>@report.ProductCounts</td>
+											<td>$@Math.Round((decimal)@report.TotalAmount, 2)</td>
+											<td>@ConvertToTimeZone(DateTime.Now.ToShortTimeString())</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						}
+						<button type="button" @onclick="() => monthlyReport = new List<MonthlyReport>()">Clear Report</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+}

@@ -10,5 +10,7 @@ namespace DAL.Contracts
 		Task<string> Update(Product product);
         Task<List<Product>> SearchProducts(string keyword);
         Task<Product> GetProduct(int id);
+        Task<List<MonthlyReport>> GetMonthlyReports();
+        Task<string> GetLastReportRun();
 	}
 }

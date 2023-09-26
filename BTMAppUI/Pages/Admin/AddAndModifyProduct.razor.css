@@ -1,6 +1,21 @@
 ﻿.row {
     display: flex;
 }
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    font-size: 12px;
+}
+.table-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
 
 .column {
     flex: 50%;

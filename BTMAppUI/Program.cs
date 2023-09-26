@@ -3,6 +3,7 @@ using DAL;
 using DAL.Contracts;
 using DAL.Models;
 using Infrastructure.Repositories.Base;
+using Infrastructure.Repositories.Generics;
 using Infrastructure.Repositories.ProductRepo;
 using Infrastructure.Service;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -30,7 +31,7 @@ namespace BTMAppUI
 			builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             builder.Services.AddTransient<ISQLDataAccess, SQLDataAccess>();
             builder.Services.AddTransient<IProductService, ProductService>();
-			builder.Services.AddTransient<IRepository<Product>, ProductRepository>();
+			builder.Services.AddTransient<GenericRepository<Product>, ProductRepository>();
 
 			var app = builder.Build();
 

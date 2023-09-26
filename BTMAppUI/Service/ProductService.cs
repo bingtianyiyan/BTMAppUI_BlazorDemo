@@ -1,6 +1,7 @@
 ﻿using DAL.Contracts;
 using DAL.Models;
 using Infrastructure.Repositories.Base;
+using Infrastructure.Repositories.Generics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,9 @@ namespace Infrastructure.Service
      */
     public class ProductService : IProductService
 	{
-		private readonly IRepository<Product> _productRepository;
+		private readonly GenericRepository<Product> _productRepository;
 
-		public ProductService(IRepository<Product> productRepository)
+		public ProductService(GenericRepository<Product> productRepository)
 		{
 			_productRepository = productRepository;
 		}
@@ -52,5 +53,15 @@ namespace Infrastructure.Service
         {
             return _productRepository.GetData(product_Id);
         }
-    }
+
+		public Task<List<MonthlyReport>> GetMonthlyReports()
+		{
+			return _productRepository.GetMonthlyReports();
+		}
+
+		public Task<string> GetLastReportRun()
+		{
+			return _productRepository.GetLastReportRun();
+		}
+	}
 }

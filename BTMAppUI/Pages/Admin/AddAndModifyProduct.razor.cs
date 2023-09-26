@@ -1,23 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
-using System.Net.Http;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.Web.Virtualization;
-using Microsoft.JSInterop;
-using BTMAppUI;
-using BTMAppUI.Shared;
-using DAL;
-using DAL.Contracts;
 using DAL.Models;
 using BTMAppUI.Data.Models;
-using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace BTMAppUI.Pages.Admin
 {
@@ -62,7 +45,8 @@ namespace BTMAppUI.Pages.Admin
 			{
 				Product_Name = productUpdate.Product_Name,
 				Price = productUpdate.Price,
-				Product_Id = productUpdate.Product_Id
+				Product_Id = productUpdate.Product_Id,
+				Description = productUpdate.Description
 			};
 			ReturnMessage = await productService.Update(p);
 
@@ -81,16 +65,19 @@ namespace BTMAppUI.Pages.Admin
 			{
 				Product_Name = productSelected.Product_Name,
 				Price = productSelected.Price,
-				Product_Id = productSelected.Product_Id
+				Product_Id = productSelected.Product_Id,
+				Description = productSelected.Description,
 			};
 		}
 
 		protected async Task SearchProducts(string keyword)
 		{
 			SearchReturnMessage = string.Empty;
+
 			products = await productService.SearchProducts(keyword);
 			if (!products.Any())
 				SearchReturnMessage = "No results found.";
+
 		}
 
 		public void Enter(KeyboardEventArgs e)

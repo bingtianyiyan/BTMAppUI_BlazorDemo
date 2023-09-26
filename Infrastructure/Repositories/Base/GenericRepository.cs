@@ -59,5 +59,16 @@ namespace Infrastructure.Repositories.Generics
         {
             throw new NotImplementedException();
         }
-    }
+
+		public virtual Task<List<MonthlyReport>> GetMonthlyReports()
+		{
+			throw new NotImplementedException();
+		}
+
+		public virtual Task<string> GetLastReportRun()
+		{
+			throw new NotImplementedException();
+		}
+
+	}
 }

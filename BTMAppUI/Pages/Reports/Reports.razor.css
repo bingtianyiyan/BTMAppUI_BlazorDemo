@@ -1,0 +1,69 @@
+﻿.table{
+	margin: auto;
+}
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+th {
+	position: sticky;
+	top: 0;
+	background-color: white;
+	font-size: 12px;
+}
+
+.table-container {
+	max-height: 600px;
+	overflow-y: auto;
+}
+
+.container {
+	display: flex;
+}
+
+.column {
+	flex: 1;
+	padding: 20px;
+}
+
+.left {
+	max-width: 400px;
+}
+
+.right {
+
+}
+
+/* Report Side Navigation */
+.unorderedlist {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	background-color: #f1f1f1;
+	height: 100px;
+}
+
+.list {
+	display: block;
+	color: #ffff;
+	padding: 10px 20px 10px 20px;
+	text-decoration: none;
+	background-color: #808080;
+}
+
+
+
+
+.productsAddedByMonthLink, .totalExpectedRevenueLink {
+	cursor: pointer;
+}
+.totalExpectedRevenueLink:hover{
+	text-decoration: underline;
+}
+
+	.productsAddedByMonthLink:hover {
+	/*	text-decoration: underline;*/
+	}

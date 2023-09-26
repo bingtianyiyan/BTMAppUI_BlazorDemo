@@ -20,8 +20,15 @@ namespace DAL
         {
             _config = config;
 		}
-
-        public async Task<List<T>> LoadData<T, U>(string sql, U parameters)
+        /// <summary>
+        /// Get list of object. Re-usable method.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="U"></typeparam>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public async Task<List<T>> GetList<T, U>(string sql, U parameters)
         {
             string connectionString = _config.GetConnectionString(ConnectionStringName);
 
@@ -67,7 +74,14 @@ namespace DAL
 				await connection.ExecuteAsync(sql, parameters);
 			}
 		}
-
+        /// <summary>
+        /// Get single object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="U"></typeparam>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public async Task<T> GetData<T, U>(string sql, U parameters)
         {
             string connectionString = _config.GetConnectionString(ConnectionStringName);
