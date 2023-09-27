@@ -1,1 +1,15 @@
-﻿
+﻿html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, 'Palatino Linotype';
+}
+
+.content {
+    flex: 1;
+}
+
+footer {
+    flex-shrink: 0;
+}

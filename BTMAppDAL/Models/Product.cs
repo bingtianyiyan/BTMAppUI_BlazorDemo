@@ -13,13 +13,14 @@ namespace DAL.Models
             QuantityPerUnit = 1;
             Category_id = 1;
             Subcategory_id = 1;
+            Date_Modified = DateTime.Now;
         }
         [Key]
         public int Product_Id { get; set; }
         public string? Product_Name { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal? Price { get; set; }
-        public DateTime? Date_Added { get; set; } = DateTime.Now;
+        public DateTime? Date_Added { get; set; }
         public DateTime? Date_Modified { get; set; }
         public string? Description { get; set; }
         public int? QuantityPerUnit { get; set; }

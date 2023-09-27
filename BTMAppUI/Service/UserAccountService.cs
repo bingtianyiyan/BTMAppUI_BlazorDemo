@@ -13,10 +13,17 @@ namespace BTMAppUI.Service
 		{
 			_userRepository = userRepository;
 		}
-
-		public Task Add(User entity)
+        public bool UserFound { get; set; }
+        public async Task Add(User user)
 		{
-			throw new NotImplementedException();
+			if (user == null) return;
+
+			//check existing user
+			UserFound = await _userRepository.Find(user);
+			if (!UserFound)
+			{
+				await _userRepository.Add(user);
+			}
 		}
 
 		public Task<List<User>> All()
@@ -29,7 +36,7 @@ namespace BTMAppUI.Service
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<User> Find(Expression<Func<User, bool>> predicate)
+		public Task<bool> Find(User user)
 		{
 			throw new NotImplementedException();
 		}

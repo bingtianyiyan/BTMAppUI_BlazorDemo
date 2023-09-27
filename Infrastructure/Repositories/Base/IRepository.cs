@@ -1,4 +1,5 @@
-﻿using DAL.Models;
+﻿using BTMAppUI.Data.Models;
+using DAL.Models;
 using System.Linq.Expressions;
 
 namespace Infrastructure.Repositories.Base
@@ -9,8 +10,9 @@ namespace Infrastructure.Repositories.Base
         Task Update(T entity);
         Task Delete(int id);
         Task<List<T>> All();
-        IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
-        Task<List<Product>> SearchData(string keyword);
+        Task<bool> Find(T entity);
+
+		Task<List<Product>> SearchData(string keyword);
         Task<T> Get(int id);
     }
 }

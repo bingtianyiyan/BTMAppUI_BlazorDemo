@@ -1,4 +1,5 @@
-﻿using DAL.Contracts;
+﻿using BTMAppUI.Data.Models;
+using DAL.Contracts;
 using DAL.Models;
 using Infrastructure.Repositories.Base;
 using System.Linq.Expressions;
@@ -79,7 +80,6 @@ namespace Infrastructure.Repositories.ProductRepo
 						SET 
 						  [Product_Name] =   @Product_Name,
                           [Price]			=  @Price,
-                          [Date_Added]		=  @Date_Added,
                           [Date_Modified]	=  @Date_Modified,
                           [Description]		=  @Description,
                           [QuantityPerUnit]	=  @QuantityPerUnit,
@@ -133,7 +133,7 @@ namespace Infrastructure.Repositories.ProductRepo
 			return lastAuditDate;
 		}
 
-		public IEnumerable<Product> Find(Expression<Func<Product, bool>> predicate)
+		public Task<bool> Find(Product user)
 		{
 			throw new NotImplementedException();
 		}

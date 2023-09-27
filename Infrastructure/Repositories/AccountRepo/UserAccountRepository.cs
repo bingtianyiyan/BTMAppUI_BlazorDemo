@@ -19,9 +19,12 @@ namespace Infrastructure.Repositories.AccountRepo
 			this._db = db;
 		}
 
-		public Task Add(User entity)
+		public Task Add(User user)
 		{
-			throw new NotImplementedException();
+			string sql = @"INSERT INTO dbo.Users" +
+						 "([UserName],[Password],[Role])" +
+						 "VALUES (@UserName, @Password, @Role);";
+			return _db.InsertData(sql, user);
 		}
 
 		public Task<List<User>> All()
@@ -34,9 +37,12 @@ namespace Infrastructure.Repositories.AccountRepo
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<User> Find(Expression<Func<User, bool>> predicate)
+		public async Task<bool> Find(User user)
 		{
-			throw new NotImplementedException();
+			string sql = @"SELECT 1 FROM dbo.Users 
+							WHERE Lower(username) ='" + user.UserName + "'";
+			var result = await _db.GetData<bool, dynamic>(sql, new { });
+			return result;
 		}
 
 		public Task<User> Get(int id)
@@ -47,8 +53,13 @@ namespace Infrastructure.Repositories.AccountRepo
 		public Task<User> GetByUserName(string userName)
 		{
 			string sql = "SELECT * FROM Users WHERE Username ='" + userName + "'";
-			var user = _db.GetData<User, dynamic>(sql, new { });
-			return user;
+			var result = _db.GetData<User, dynamic>(sql, new { });
+			return result;
+		}
+
+		public async Task RegisterAccount(User user)
+		{
+			await Add(user);
 		}
 
 		public Task<List<Product>> SearchData(string keyword)

@@ -9,12 +9,16 @@
 
   <ItemGroup>
     <None Remove="Pages\Login\Login.razor.css" />
+    <None Remove="Pages\Products\ProductDetails.razor.css" />
+    <None Remove="Pages\Registration\Registration.razor.css" />
     <None Remove="Pages\Reports\Reports.razor.css" />
     <None Remove="Pages\yyrdltlf.g2x~" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Pages\Login\Login.razor.css" />
+    <Content Include="Pages\Products\ProductDetails.razor.css" />
+    <Content Include="Pages\Registration\Registration.razor.css" />
     <Content Include="Pages\Reports\Reports.razor.css" />
   </ItemGroup>
 

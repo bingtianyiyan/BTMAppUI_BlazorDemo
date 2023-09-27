@@ -1,0 +1,94 @@
+﻿@page "/Registration/Registration"
+
+@using BTMAppUI.Data.Authentication;
+@using BTMAppUI.Data.Models;
+@using BTMAppUI.Service;
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+@inject IUserAccountService userAccountService;
+@inject IJSRuntime js
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navManager
+@inject ProtectedSessionStorage ProtectedSessionStore
+
+@code {
+	private UserModel model = new UserModel();
+	private User user;
+	private string ErrorMessage;
+	private string SuccessMessage;
+	protected async Task Register()
+	{
+		ErrorMessage = string.Empty;
+		SuccessMessage = string.Empty;
+		if (model != null)
+		{
+			if (model == null) return;
+
+			user = new User
+				{
+					UserName = model.UserName,
+					Password = model.Password
+				};
+		}
+		await userAccountService.Add(user);
+		if (userAccountService.UserFound)
+		{
+			ErrorMessage = "A user already exists.";
+			return;
+		}
+
+		SuccessMessage = "You have registered successfully";
+		//auto login
+		await Authenticate();
+
+		navManager.NavigateTo("/", true);
+
+	}
+
+	private async Task Authenticate()
+	{
+		var userAccount = await userAccountService.GetByUserName(model.UserName);
+		if (userAccount == null || userAccount.Password != model.Password)
+		{
+			await js.InvokeVoidAsync("alert", "Invalid Username and Password");
+			return;
+		}
+
+		var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+		await customAuthStateProvider.UpdateAuthenticationState(new UserSession
+			{
+				UserName = userAccount.UserName,
+				Role = userAccount.Role
+			});
+		navManager.NavigateTo("/", true);
+	}
+}
+
+
+<div class="border col-md-4 col-sm-6 col-sm-8 col-sm-12  m-auto mt-5 p-5 shadow-sm">
+	<div class="m-auto text-center">
+		<h4>Account Registration</h4>
+	</div>
+	<div class="col col-md-10 m-auto">
+		<EditForm Model="@model" OnValidSubmit="@Register">
+			<DataAnnotationsValidator />
+			<ValidationSummary />
+
+			<div class="mb-3">
+				<label class="form-label">Username</label>
+				<InputText type="username" class="form-control" id="username" @bind-Value="model.UserName" />
+			</div>
+			<div class="mb-3">
+				<label class="form-label">Password</label>
+				<InputText type="password" class="form-control" id="password" @bind-Value="model.Password" />
+			</div>
+			<div class="text-center">
+				<button type="submit" class="btn m-auto">Register</button>
+			</div>
+		</EditForm>
+		
+		<div class="text-center  mt-3 border">
+			<span class="text-danger">@ErrorMessage</span>
+			<span class="text-success">@SuccessMessage</span>
+		</div>
+	</div>
+</div>

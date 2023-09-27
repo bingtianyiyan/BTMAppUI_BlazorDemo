@@ -1,0 +1,13 @@
+﻿button {
+	color: white;
+	background-color: #4f4f4f;
+}
+
+	button:hover {
+		color: white;
+		background-color: #1f1f1f;
+	}
+
+.validation-errors {
+	color: red;
+}

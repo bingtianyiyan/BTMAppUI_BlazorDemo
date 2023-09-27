@@ -22,8 +22,8 @@ else
 		</div>
 	</section>
 	<div class="row align-items-start">
-		<div class="col col-6 border vh-50 overflow-hidden p-4 m-2 content m-auto shadow-sm">
-			<h3>AddProduct</h3>
+		<div class="col col-6 border vh-50 overflow-hidden p-4 m-2 content m-auto shadow-sm mx-2">
+			<h6>AddProduct</h6>
 
 			<EditForm Model="@product" OnValidSubmit="@AddNewProduct">
 				<DataAnnotationsValidator />
@@ -91,7 +91,7 @@ else
 				<EditForm Model="@productUpdate">
 					<DataAnnotationsValidator />
 					<ValidationSummary />
-					<h3>Edit Product</h3>
+					<h6>Edit Product</h6>
 					<hr />
 					<div class="form-group row">
 						<label class="col-sm-4 col-form-label">

@@ -17,13 +17,14 @@
 		public string Password { get; set; }
 	}
 	private Model model = new Model();
-
+	private string ErrorMessage;
+	private string SuccessMessage;
 	private async Task Authenticate()
 	{
 		var userAccount = await userAccountService.GetByUserName(model.UserName);
 		if (userAccount == null || userAccount.Password != model.Password)
 		{
-			await js.InvokeVoidAsync("alert", "Invalid Username and Password");
+			ErrorMessage = "Sorry, username or password is invalid.";
 			return;
 		}
 
@@ -35,6 +36,8 @@
 			});
 		navManager.NavigateTo("/", true);
 	}
+
+
 }
 <div class="border col-md-4 col-sm-6 col-sm-8 col-sm-12  m-auto mt-5 p-5 shadow-sm">
 	<div class="m-auto text-center">
@@ -52,5 +55,12 @@
 		<div class="text-center">
 			<button type="button" class="btn m-auto" @onclick="Authenticate">Submit</button>
 		</div>
+		@if (ErrorMessage != null || SuccessMessage != null)
+		{
+			<div class="text-center  mt-3 border">
+				<span class="text-danger">@ErrorMessage</span>
+				<span class="text-success">@SuccessMessage</span>
+			</div>
+		}
 	</div>
 </div>
