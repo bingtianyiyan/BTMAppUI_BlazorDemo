@@ -6,7 +6,7 @@ namespace Infrastructure.Repositories.Base
 {
     public interface IRepository<T>// : IProductUploadProcessor, ICategory, ISubcategory, ISearchFilterQueries
     {
-        Task Add(T entity);
+        Task<int> Add(T entity);
         Task Update(T entity);
         Task Delete(int id);
         Task<List<T>> All();

@@ -21,7 +21,11 @@ th {
     flex: 50%;
 }
 .content{
-    height: 550px;
+    height: 450px;
+}
+
+.content-add-product {
+    /*height: 240px;*/
 }
 .searchProduct input[type=text] {
     padding: 10px;

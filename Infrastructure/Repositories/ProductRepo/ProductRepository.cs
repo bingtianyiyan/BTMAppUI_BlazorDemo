@@ -22,7 +22,7 @@ namespace Infrastructure.Repositories.ProductRepo
         /// </summary>
         /// <param name="product"></param>
         /// <returns></returns>
-        public Task Add(Product product)
+        public Task<int> Add(Product product)
         {
             string sql = @"INSERT INTO dbo.Products ([Product_Name]
                           ,[Price]
@@ -42,7 +42,8 @@ namespace Infrastructure.Repositories.ProductRepo
                           ,@QuantityPerUnit
                           ,@Date_Removed
 						  ,@Subcategory_id
-						  ,@category_id);";
+						  ,@category_id);
+            SELECT SCOPE_IDENTITY();";
 
             return _db.InsertData(sql, product);
         }

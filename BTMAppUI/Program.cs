@@ -6,6 +6,7 @@ using DAL.Models;
 using Infrastructure.Repositories.AccountRepo;
 using Infrastructure.Repositories.Base;
 using Infrastructure.Repositories.ProductRepo;
+using Infrastructure.Repositories.UploadImageRepo;
 using Infrastructure.Service;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
@@ -31,11 +32,18 @@ namespace BTMAppUI
 			builder.Services.AddScoped<ProtectedSessionStorage>();
 			builder.Services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Shared");
             builder.Services.AddTransient<ISQLDataAccess, SQLDataAccess>();
-            builder.Services.AddTransient<IProductService, ProductService>();
+
+            //SERVICES
+			builder.Services.AddTransient<IProductService, ProductService>();
+			builder.Services.AddTransient<IUserAccountService, UserAccountService>();
+			builder.Services.AddTransient<IUploadImageService, UploadImageService>();
+
+            //REPOSITORIES
 			builder.Services.AddTransient<IProductRepository, ProductRepository>();
-           
-            builder.Services.AddTransient<IUserAccountService, UserAccountService>();
+			builder.Services.AddTransient<IUploadImageRepository, UploadImageRepository>();
 			builder.Services.AddTransient<IUserAccountRepository, UserAccountRepository>();
+
+
 			builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 			builder.Services.AddAuthorization(options =>
 			{

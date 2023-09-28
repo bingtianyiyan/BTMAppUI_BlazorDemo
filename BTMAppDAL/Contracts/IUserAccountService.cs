@@ -1,12 +1,12 @@
 ﻿using BTMAppUI.Data.Models;
 using DAL.Models;
-using Infrastructure.Repositories.Base;
 
-namespace BTMAppUI.Service
+namespace DAL.Contracts
 {
-	public interface IUserAccountService : IRepository<User>
+	public interface IUserAccountService
 	{
 		bool UserFound { get; set; }
 		Task<User> GetByUserName(string userName);
+		Task Add(User user);
 	}
 }

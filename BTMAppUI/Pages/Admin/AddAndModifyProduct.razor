@@ -1,11 +1,13 @@
 ﻿@page "/Admin/AddAndModifyProduct"
 @attribute [Authorize(Roles = "Administrator")]
-@using DAL
-@using DAL.Contracts;
+@using DAL;
+@using DAL.Contracts
 @using DAL.Models
 @using BTMAppUI.Data.Models
-
+@using System.ComponentModel.DataAnnotations
 @inject IProductService productService
+@inject IUploadImageService uploadImageService
+@inject IWebHostEnvironment Environment
 
 @if (products is null)
 {
@@ -21,24 +23,68 @@ else
 			</EditForm>
 		</div>
 	</section>
-	<div class="row align-items-start">
-		<div class="col col-6 border vh-50 overflow-hidden p-4 m-2 content m-auto shadow-sm mx-2">
-			<h6>AddProduct</h6>
-
+	<div>
+		<div class="border p-3 mb-3 shadow-sm">
 			<EditForm Model="@product" OnValidSubmit="@AddNewProduct">
+				<h6>Add Product</h6>
 				<DataAnnotationsValidator />
 				<ValidationSummary />
-
-				<InputText id="Product_Name" @bind-Value="product.Product_Name" />
-				<InputNumber id="Price" @bind-Value="product.Price" />
-
-				<input type="submit" value="Submit" class="btn btn-primary" />
+				<hr />
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label">
+						Product Name
+					</label>
+					<div class="col-4 mb-2 no-rounded-corners">
+						<InputText id="ProductName" class="form-control" placeholder="Product Name"
+							   @bind-Value="@product.Product_Name" />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label">
+						Price
+					</label>
+					<div class="col-3 mb-2">
+						<InputNumber id="Price" class="form-control" placeholder="0.00"
+								 @bind-Value="@product.Price" />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label">
+						Description
+					</label>
+					<div class="col-sm-5 mb-2">
+						<InputText id="Description" class="form-control"
+							   @bind-Value="@product.Description" />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label">
+						Upload Image
+					</label>
+					<div class="col-sm-3">
+						<InputFile class="form-control" OnChange="OnInputFileChange" /><span>@ReturnMessage</span>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-3 col-form-label">
+						<button class="btn btn-danger" type="submit">
+							Add
+						</button>
+					</div>
+					<div class="col-sm-6 mt-3">
+						<span class="text-success"><em></em></span>
+					</div>
+				</div>
 			</EditForm>
+		</div>
+	</div>
 
+	<div class="row align-items-start">
+		<div class="col">
 			<div class="row">
 				@*First column*@
 				<div class="column">
-						<div class="table-container">
+						<div class="table-container border ps-2 pb-2 shadow-sm">
 							<table class="table col-12 table-striped">
 								<thead>
 									<tr>
@@ -81,7 +127,7 @@ else
 			</div>
 		</div>
 		@*Second Column*@
-		<div class="col col-5 border vh-50 overflow-hidden p-4 m-2 content m-auto shadow-sm">
+		<div class="col col-5 border vh-50 overflow-hidden p-4 content m-auto shadow-sm me-2">
 			@if (productUpdate is null)
 			{
 				<p><em>Select to view product...</em></p>
@@ -130,6 +176,14 @@ else
 							<span class="text-success"><em>@ReturnMessage</em></span>
 						</div>
 					</div>
+					@if(productUpdate.Product_Image != null)
+					{
+						<div class="form-group row">
+							<div class="col-sm-4 col-form-label">
+								<img src="@productUpdate.Product_Image" alt="Image" class="img-fluid" />
+							</div>
+						</div>
+					}
 				</EditForm>
 			}
 		</div>

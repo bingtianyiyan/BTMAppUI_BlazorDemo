@@ -26,7 +26,7 @@ namespace Infrastructure.Service
 			return _productRepository.SearchData(keyword);
 		}
 
-		public Task AddProduct(Product product)
+		public Task<int> AddProduct(Product product)
 		{
 			return _productRepository.Add(product);
 		}

@@ -1,4 +1,5 @@
-﻿using DAL.Contracts;
+﻿using Azure;
+using DAL.Contracts;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -39,9 +40,9 @@ namespace DAL
             }
         }
 
-        public async Task InsertData<T>(string sql, T parameters)
+        public async Task<int> InsertData<T>(string sql, T parameters)
         {
-			await Save(sql, parameters);
+			return await Save(sql, parameters);
 		}
 
         public async Task DeleteData<T>(string sql, T parameters)
@@ -51,7 +52,7 @@ namespace DAL
 
 		public async Task UpdateData<T>(string sql, T parameters)
 		{
-            await Save(sql, parameters);
+            await Save<T>(sql, parameters);
 		}
 
         public async Task<List<T>> SearchData<T, U>(string sql, U parameters)
@@ -65,14 +66,16 @@ namespace DAL
 			}
 		}
 
-		private async Task Save<T>(string sql, T parameters)
+		private async Task<int> Save<T>(string sql, T parameters)
         {
+            int id = 0;
 			string connectionString = _config.GetConnectionString(ConnectionStringName);
 
 			using (IDbConnection connection = new SqlConnection(connectionString))
 			{
-				await connection.ExecuteAsync(sql, parameters);
+				id = connection.ExecuteScalar<int>(sql, parameters);
 			}
+            return id;
 		}
         /// <summary>
         /// Get single object

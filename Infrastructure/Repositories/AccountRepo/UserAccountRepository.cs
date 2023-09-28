@@ -19,7 +19,7 @@ namespace Infrastructure.Repositories.AccountRepo
 			this._db = db;
 		}
 
-		public Task Add(User user)
+		public Task<int> Add(User user)
 		{
 			string sql = @"INSERT INTO dbo.Users" +
 						 "([UserName],[Password],[Role])" +
