@@ -5,17 +5,20 @@
 @using DAL.Models
 
 @inject IProductService productService
-
+@inject IUploadImageService uploadImageService
 @code {
-    [Parameter]
-    public int Product_Id { get; set; }
+	[Parameter]
+	public int Product_Id { get; set; }
 
-    protected Product product;
+	protected Product product;
 
-    protected override async Task OnInitializedAsync()
-    {
-        product = await productService.GetProduct(Product_Id);
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		product = await productService.GetProduct(Product_Id);
+
+		ProductImage productImage = await uploadImageService.GetImage(product.Product_Id);
+		product.PrimaryImage = (productImage != null) ? productImage.ConvertedProductImage : string.Empty;
+	}
 }
 
 @if (product is null)
@@ -24,78 +27,84 @@
 }
 else
 {
-<div class="container mt-5 mb-5">
-    <div class="row d-flex justify-content-center">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="thumbnail text-center">
-                           @* <ng-container *ngFor="let image of imageList">
-                                <div class="col-md-5 m-2">
-                                    <img [src]="image?.convertedProductImage" class="img-fluid" [alt]="image.productId" (click)="onSelectImage(image)" />
-                                </div>
-                            </ng-container>*@
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="images">
-                            <div class="text-center">
-                                    <img src="https://m.media-amazon.com/images/I/81uex-eHXpL._AC_UX679_.jpg" class="img-fluid zoom" />
-                            </div>
-                            <!-- <div class="thumbnail text-center">
-                                <ng-container *ngFor="let image of imageList">
-                                    <div class="col-md-5 m-2">
-                                      <img [src]="image?.convertedProductImage" class="col-md-5" [alt]="image.productId" />
-                                    </div>
-                              </ng-container>
-                            </div> -->
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="product p-4">
-      
-                            <div class="mt-4 mb-3">
-                                <h5 class="text-uppercase">@product.Product_Name</h5>
-                                    <hr />
-                                <div class="price d-flex flex-row align-items-center">
-                                        <span class="act-price fs-5">$@Math.Round((decimal)product.Price, 2)</span>
-                                        <div class="ml-2"> <small class="dis-price mx-2">$59</small> <span class="text-secondary">40% OFF</span> </div>
-                                </div>
-                            </div>
-                                <p class="about">@product.Description</p>
-                            <div class="sizes mt-5">
-                                <h6 class="text-uppercase">Size</h6>
-                                <label class="radio">
-                                    <input type="radio" name="size" value="S" checked>
-                                    <span>S</span>
-                                </label>
-                                <label class="radio">
-                                    <input type="radio" name="size" value="M">
-                                    <span>M</span>
-                                </label>
-                                <label class="radio">
-                                    <input type="radio" name="size" value="L"> <span>L</span>
-                                </label>
-                                <label class="radio">
-                                    <input type="radio" name="size" value="XL">
-                                    <span>
-                                        XL
-                                    </span>
-                                </label>
-                                <label class="radio">
-                                    <input type="radio" name="size" value="XXL">
-                                    <span>
-                                        XXL
-                                    </span>
-                                </label>
-                            </div>
-                            <div class="cart mt-4 align-items-center"> <button class="btn btn-danger text-uppercase mr-2 px-4">Add to cart</button> <i class="fa fa-heart text-muted"></i> <i class="fa fa-share-alt text-muted"></i> </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+	<div class="container mt-5 mb-5">
+		<div class="row d-flex justify-content-center">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="row">
+						<div class="col-md-2">
+							<div class="thumbnail text-center">
+								<div class="col-md-5 m-2">
+									<img src="@product.PrimaryImage" class="img-fluid" />
+								</div>
+
+							</div>
+						</div>
+						<div class="col-md-5">
+							<div class="images mt-4">
+								<div class="text-center">
+									@if (!string.IsNullOrEmpty(product.PrimaryImage))
+									{
+										<img src="@product.PrimaryImage" class="img-fluid" />
+									}
+									else
+									{
+										<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png" class="img-fluid" />
+									}
+								</div>
+								<!-- <div class="thumbnail text-center">
+									<ng-container *ngFor="let image of imageList">
+										<div class="col-md-5 m-2">
+										  <img [src]="image?.convertedProductImage" class="col-md-5" [alt]="image.productId" />
+										</div>
+								  </ng-container>
+								</div> -->
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="product p-1">
+
+								<div class="mt-4 mb-3">
+									<h5 class="text-uppercase">@product.Product_Name</h5>
+									<hr />
+									<div class="price d-flex flex-row align-items-center">
+										<span class="act-price fs-5">$@Math.Round((decimal)product.Price, 2)</span>
+										<div class="ml-2"> <small class="dis-price mx-2">$59</small> <span class="text-secondary">40% OFF</span> </div>
+									</div>
+								</div>
+								<p class="about">@product.Description</p>
+								<div class="sizes mt-5">
+									<h6 class="text-uppercase">Size</h6>
+									<label class="radio">
+										<input type="radio" name="size" value="S" checked>
+										<span>S</span>
+									</label>
+									<label class="radio">
+										<input type="radio" name="size" value="M">
+										<span>M</span>
+									</label>
+									<label class="radio">
+										<input type="radio" name="size" value="L"> <span>L</span>
+									</label>
+									<label class="radio">
+										<input type="radio" name="size" value="XL">
+										<span>
+											XL
+										</span>
+									</label>
+									<label class="radio">
+										<input type="radio" name="size" value="XXL">
+										<span>
+											XXL
+										</span>
+									</label>
+								</div>
+								<div class="cart mt-4 align-items-center"> <button class="btn btn-danger text-uppercase mr-2 px-4">Add to cart</button> <i class="fa fa-heart text-muted"></i> <i class="fa fa-share-alt text-muted"></i> </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 }

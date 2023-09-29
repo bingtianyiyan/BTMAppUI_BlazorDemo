@@ -6,24 +6,32 @@
 @using DAL.Models
 
 @inject IProductService productService
+@inject IUploadImageService uploadImageService
 @inject NavigationManager NavigationManager
 @code {
 	private Task<AuthenticationState> authenticationState { get; set; }
 	private List<Product> products;
+	private ProductImage? productImage;
 	private string searchKeyword;
-	public string SearchReturnMessage { get; set; }
+	public string ReturnMessage { get; set; }
 	private string SearchKeyword { get; set; }
 	protected override async Task OnInitializedAsync()
 	{
 		products = await productService.GetProducts();
+
+		for (int i = 0; i < products.Count(); i++)
+		{
+			string img = await MapImageToProducts(products[i].Product_Id);
+			products[i].PrimaryImage = img;
+		}
 	}
 
 	protected async Task SearchProducts(string keyword)
 	{
-		SearchReturnMessage = string.Empty;
+		ReturnMessage = string.Empty;
 		products = await productService.SearchProducts(keyword);
 		if (!products.Any())
-			SearchReturnMessage = "No results found.";
+			ReturnMessage = "No results found.";
 	}
 
 	public void Enter(KeyboardEventArgs e)
@@ -37,6 +45,12 @@
 	protected void ProductDetails(int product_Id)
 	{
 		NavigationManager.NavigateTo("/Products/ProductDetails/" + product_Id);
+	}
+
+	protected async Task<string> MapImageToProducts(int product_Id)
+	{
+		var result = await uploadImageService.GetImage(product_Id);
+		return (result != null) ? result.ConvertedProductImage : string.Empty;
 	}
 }
 
@@ -66,14 +80,18 @@ else
 	<div class="row">
 		@foreach (var product in products)
 		{
-
 			<!--cards-->
 			<div class="col-md-3">
 				<figure class="card card-product rounded-0 border-0" style="height: 500px;">
 					<div class="col-md-12 img-fluid">
-
-						<img class="img-fluid" @onclick="() => ProductDetails(product.Product_Id)" src="https://cb.scene7.com/is/image/Crate/FauxBoisMelDinnerPltSSS21/$web_pdp_main_carousel_med$/201215170032/faux-bois-melamine-dinner-plate.jpg">
-						@*<img [src]="product?.images[0]?.convertedProductImage || '../../assets/default-image.png'" class="img-fluid" />*@
+						@if (!string.IsNullOrEmpty(product.PrimaryImage))
+						{
+							<img class="img-fluid" @onclick="() => ProductDetails(product.Product_Id)" src="@product.PrimaryImage">
+						}
+						else
+						{
+							<img class="img-fluid" @onclick="() => ProductDetails(product.Product_Id)" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png"  />
+						}
 					</div>
 					<div class="bottom-wrap text-center mt-3">
 						<span class="small">New Arrival</span>

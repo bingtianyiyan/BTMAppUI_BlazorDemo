@@ -107,7 +107,7 @@ else
 											<td>@product.Description</td>
 											<td>@product.Date_Added</td>
 											<td>
-												<button class="btn btn-secondary" type="button" @onclick="() => SelectProduct_Click(product.Product_Id)">
+												<button class="btn btn-secondary" type="button" @onclick="() => SelectProduct(product.Product_Id)">
 													Modify
 												</button>
 											</td>
@@ -127,7 +127,7 @@ else
 			</div>
 		</div>
 		@*Second Column*@
-		<div class="col col-5 border vh-50 overflow-hidden p-4 content m-auto shadow-sm me-2">
+		<div class="col col-5 border h-100 overflow-hidden p-4 content m-auto shadow-sm me-2">
 			@if (productUpdate is null)
 			{
 				<p><em>Select to view product...</em></p>
@@ -161,9 +161,17 @@ else
 						<label class="col-sm-4 col-form-label">
 							Description
 						</label>
-						<div class="col-sm-8">
+						<div class="col-sm-8 mb-2">
 							<InputText id="Description" class="form-control"
 							   @bind-Value="@productUpdate.Description" />
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">
+							Upload Image
+						</label>
+						<div class="col-sm-6">
+							<InputFile class="form-control" OnChange="OnInputFileChange" />
 						</div>
 					</div>
 					<div class="form-group row">
@@ -173,7 +181,7 @@ else
 							</button>
 						</div>
 						<div class="col-sm-6 mt-3">
-							<span class="text-success"><em>@ReturnMessage</em></span>
+							<span class="text-success"><em>@EditReturnMessage</em></span>
 						</div>
 					</div>
 					@if(productUpdate.Product_Image != null)

@@ -40,7 +40,7 @@ namespace Infrastructure.Repositories.UploadImageRepo
 
 		public Task<ProductImage> Get(int id)
 		{
-			string sql = "SELECT top 1 * FROM dbo.ProductImages WHERE Product_Id = " + id;
+			string sql = "SELECT top 1 * FROM dbo.ProductImages WHERE Product_Id = " + id + " ORDER BY Image_Id DESC";
 			var image = _db.GetData<ProductImage, dynamic>(sql, new { });
 			return image;
 		}

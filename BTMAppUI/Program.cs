@@ -11,34 +11,35 @@ using Infrastructure.Service;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BTMAppUI
 {
 	public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+	{
+		public static void Main(string[] args)
+		{
+			var builder = WebApplication.CreateBuilder(args);
 
-            //// Add services to the container.
-            //var connectionString = builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found.");
-            //builder.Services.AddDbContext<SQLDataAccess>(options =>
-            //    options.UseSqlServer(connectionString));
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-            //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
-            builder.Services.AddRazorPages();
-            builder.Services.AddServerSideBlazor();
+			//// Add services to the container.
+			//var connectionString = builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found.");
+			//builder.Services.AddDbContext<SQLDataAccess>(options =>
+			//    options.UseSqlServer(connectionString));
+			builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+			//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+			//    .AddEntityFrameworkStores<ApplicationDbContext>();
+			builder.Services.AddRazorPages();
+			builder.Services.AddServerSideBlazor();
 			builder.Services.AddScoped<ProtectedSessionStorage>();
 			builder.Services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Shared");
-            builder.Services.AddTransient<ISQLDataAccess, SQLDataAccess>();
+			builder.Services.AddTransient<ISQLDataAccess, SQLDataAccess>();
 
-            //SERVICES
+			//SERVICES
 			builder.Services.AddTransient<IProductService, ProductService>();
 			builder.Services.AddTransient<IUserAccountService, UserAccountService>();
 			builder.Services.AddTransient<IUploadImageService, UploadImageService>();
 
-            //REPOSITORIES
+			//REPOSITORIES
 			builder.Services.AddTransient<IProductRepository, ProductRepository>();
 			builder.Services.AddTransient<IUploadImageRepository, UploadImageRepository>();
 			builder.Services.AddTransient<IUserAccountRepository, UserAccountRepository>();
@@ -50,6 +51,7 @@ namespace BTMAppUI
 				options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Administrator"));
 			});
 
+
 			builder.Services.ConfigureApplicationCookie(options =>
 			{
 				options.AccessDeniedPath = "/accessdenied";
@@ -57,32 +59,32 @@ namespace BTMAppUI
 
 			var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseMigrationsEndPoint();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+			// Configure the HTTP request pipeline.
+			if (app.Environment.IsDevelopment())
+			{
+				app.UseMigrationsEndPoint();
+			}
+			else
+			{
+				app.UseExceptionHandler("/Error");
+				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+				app.UseHsts();
+			}
 
-            app.UseHttpsRedirection();
+			app.UseHttpsRedirection();
 
-            app.UseStaticFiles();
+			app.UseStaticFiles();
 
-            app.UseRouting();
+			app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+			app.UseAuthentication();
+			app.UseAuthorization();
 
-            app.MapControllers();
-            app.MapBlazorHub();
-            app.MapFallbackToPage("/_Host");
+			app.MapControllers();
+			app.MapBlazorHub();
+			app.MapFallbackToPage("/_Host");
 
-            app.Run();
-        }
-    }
+			app.Run();
+		}
+	}
 }

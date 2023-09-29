@@ -27,11 +27,13 @@ namespace DAL.Models
         public DateTime? Date_Removed { get; set; }
         public int Category_id { get; set; }
         public int Subcategory_id { get; set; }
-        //[ForeignKey("Product_Id")]
-        //public virtual IEnumerable<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
-        //[ForeignKey("Category_id")]
-        //public virtual Category Category { get; set; }
-        //[ForeignKey("Subcategory_id")]
-        //public virtual Subcategory Subcategory { get; set; }
-    }
+		//[ForeignKey("Product_Id")]
+		//public virtual IEnumerable<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
+		//[ForeignKey("Category_id")]
+		//public virtual Category Category { get; set; }
+		//[ForeignKey("Subcategory_id")]
+		//public virtual Subcategory Subcategory { get; set; }
+		public virtual IEnumerable<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
+        public string PrimaryImage { get; set; }
+	}
 }
