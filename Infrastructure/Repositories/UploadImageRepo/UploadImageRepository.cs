@@ -1,5 +1,6 @@
 ﻿using DAL.Contracts;
 using DAL.Models;
+using Infrastructure.Repositories.Base;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories.UploadImageRepo
 {
-	public class UploadImageRepository : IUploadImageRepository
+	public class UploadImageRepository : BaseRepository<ProductImage>, IUploadImageRepository
 	{
 		private readonly ISQLDataAccess _db;
 
@@ -18,46 +19,11 @@ namespace Infrastructure.Repositories.UploadImageRepo
 			this._db = _db;
 		}
 
-		public Task<int> Add(ProductImage entity)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task<List<ProductImage>> All()
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task Delete(int id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task<bool> Find(ProductImage entity)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task<ProductImage> Get(int id)
+		public override Task<ProductImage> Get(int id)
 		{
 			string sql = "SELECT top 1 * FROM dbo.ProductImages WHERE Product_Id = " + id + " ORDER BY Image_Id DESC";
 			var image = _db.GetData<ProductImage, dynamic>(sql, new { });
 			return image;
-		}
-
-		public Task<List<Product>> SearchData(string keyword)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task Update(ProductImage entity)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task<bool> UploadImage(ProductImage file)
-		{
-			throw new NotImplementedException();
 		}
 
 		public async Task<bool> UploadImageAsync(ProductImage file)

@@ -9,7 +9,7 @@ namespace Infrastructure.Repositories.ProductRepo
     /*
 	 B - Class Inheritance and Polymorphism
 	 */
-    public class ProductRepository : IProductRepository
+    public class ProductRepository : BaseRepository<Product>,IProductRepository
 	{
         private readonly ISQLDataAccess _db;
 
@@ -22,7 +22,7 @@ namespace Infrastructure.Repositories.ProductRepo
         /// </summary>
         /// <param name="product"></param>
         /// <returns></returns>
-        public Task<int> Add(Product product)
+        public override Task<int> Add(Product product)
         {
             string sql = @"INSERT INTO dbo.Products ([Product_Name]
                           ,[Price]
@@ -51,7 +51,7 @@ namespace Infrastructure.Repositories.ProductRepo
         /// Get all products from database through supplied query.
         /// </summary>
         /// <returns></returns>
-        public Task<List<Product>> All()
+        public override Task<List<Product>> All()
         {
             string sql = "SELECT * FROM dbo.Products ORDER BY Product_Id DESC";
 
@@ -64,7 +64,7 @@ namespace Infrastructure.Repositories.ProductRepo
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task Delete(int id)
+        public override Task Delete(int id)
         {
             string sql = $"DELETE FROM dbo.Products WHERE Product_Id =" + id;
             _db.DeleteData(sql, id);
@@ -75,7 +75,7 @@ namespace Infrastructure.Repositories.ProductRepo
         /// </summary>
         /// <param name="product"></param>
         /// <returns></returns>
-        public Task Update(Product product)
+        public override Task Update(Product product)
         {
             string sql = @"UPDATE dbo.Products
 						SET 
@@ -108,7 +108,7 @@ namespace Infrastructure.Repositories.ProductRepo
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<Product> Get(int id)
+        public override Task<Product> Get(int id)
         {
             string sql = $"SELECT * FROM dbo.Products p WHERE p.Product_Id =" + id + " ORDER BY Product_Id DESC";
 
@@ -132,16 +132,6 @@ namespace Infrastructure.Repositories.ProductRepo
             string sql = "SELECT TOP 1 CreationDate FROM MonthlyReportAuditLog al ORDER BY Id DESC";
 			var lastAuditDate = _db.GetData<string, dynamic>(sql, new { });
 			return lastAuditDate;
-		}
-
-		public Task<bool> Find(Product user)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void SaveChanges()
-		{
-			throw new NotImplementedException();
 		}
 	}
 }
