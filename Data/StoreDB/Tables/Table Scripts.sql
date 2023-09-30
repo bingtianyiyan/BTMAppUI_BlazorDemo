@@ -1,5 +1,9 @@
 
-CREATE DATABASE BTMDatabase;
+IF NOT EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = 'BTMDatabase')
+BEGIN
+    CREATE DATABASE BTMDatabase;
+END;
+
 
 USE BTMDatabase
 Go
@@ -57,6 +61,8 @@ PRIMARY KEY CLUSTERED
 GO
 
 -- [MonthlyReportAuditLog]
+DROP TABLE IF EXISTS [dbo].[MonthlyReportAuditLog];
+GO
 CREATE TABLE [dbo].[MonthlyReportAuditLog](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[CreationDate] [datetime] NULL,
