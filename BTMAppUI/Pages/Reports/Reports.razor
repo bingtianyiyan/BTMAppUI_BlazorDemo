@@ -109,6 +109,9 @@
 
 	public static string ConvertToTimeZone(string dateTime)
 	{
+		if (string.IsNullOrEmpty(dateTime))
+			dateTime = DateTime.Now.ToString();
+
 		DateTime utcDateTime = DateTime.Parse(dateTime.ToString());
 		DateTime localDateTime = utcDateTime.ToLocalTime();
 

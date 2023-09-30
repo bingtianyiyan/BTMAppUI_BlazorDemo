@@ -30,9 +30,7 @@ namespace Infrastructure.Repositories.ProductRepo
                           ,[Date_Modified]
                           ,[Description]
                           ,[QuantityPerUnit]
-                          ,[Date_Removed]
-						  ,Subcategory_id
-						  ,category_id) 
+                          ,[Date_Removed]) 
                             VALUES (
 						   @Product_Name
                           ,@Price
@@ -40,9 +38,7 @@ namespace Infrastructure.Repositories.ProductRepo
                           ,@Date_Modified
                           ,@Description
                           ,@QuantityPerUnit
-                          ,@Date_Removed
-						  ,@Subcategory_id
-						  ,@category_id);
+                          ,@Date_Removed);
             SELECT SCOPE_IDENTITY();";
 
             return _db.InsertData(sql, product);
@@ -84,9 +80,7 @@ namespace Infrastructure.Repositories.ProductRepo
                           [Date_Modified]	=  @Date_Modified,
                           [Description]		=  @Description,
                           [QuantityPerUnit]	=  @QuantityPerUnit,
-                          [Date_Removed]	=  @Date_Removed,
-						  [Subcategory_id]	=  @Subcategory_id,
-						  [category_id] 	=  @category_id
+                          [Date_Removed]	=  @Date_Removed
 						WHERE Product_Id = " + product.Product_Id;
 
             return _db.InsertData(sql, product);
