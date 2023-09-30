@@ -15,6 +15,7 @@
 	private string searchKeyword;
 	public string ReturnMessage { get; set; }
 	private string SearchKeyword { get; set; }
+	private Random random = new Random();
 	protected override async Task OnInitializedAsync()
 	{
 		products = await productService.GetProducts();
@@ -97,7 +98,7 @@ else
 							<h5 class="fs-6">@product.Product_Name</h5>
 							<div class="price-wrap h6">
 								<span class="fs-5">$@Math.Round((decimal)product.Price, 2)</span> <br>
-								<del class="text-muted"> $1980</del>
+								<del class="text-muted"> $@random.Next(1, 101)</del>
 							</div> <!-- price-wrap.// -->
 						</div> <!-- bottom-wrap.// -->
 					</div>

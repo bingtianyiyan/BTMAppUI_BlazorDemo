@@ -7,7 +7,12 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories.Base
 {
-	public class BaseRepository<T> : IRepository<T>
+	/// <summary>
+	/// Abstract class to be inherited.
+	/// Polymorphism/Inheritance
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public abstract class BaseRepository<T> : IRepository<T>
 	{
 		public virtual Task<int> Add(T entity)
 		{

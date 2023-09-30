@@ -1,6 +1,7 @@
 ﻿using BTMAppUI.Data.Models;
 using DAL.Contracts;
 using DAL.Models;
+using Infrastructure.Repositories.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories.AccountRepo
 {
-	public class UserAccountRepository : IUserAccountRepository
+	public class UserAccountRepository : BaseRepository<User>,IUserAccountRepository
 	{
 		private readonly ISQLDataAccess _db;
 
@@ -19,7 +20,7 @@ namespace Infrastructure.Repositories.AccountRepo
 			this._db = db;
 		}
 
-		public Task<int> Add(User user)
+		public override Task<int> Add(User user)
 		{
 			string sql = @"INSERT INTO dbo.Users" +
 						 "([UserName],[Password],[Role])" +
@@ -27,27 +28,12 @@ namespace Infrastructure.Repositories.AccountRepo
 			return _db.InsertData(sql, user);
 		}
 
-		public Task<List<User>> All()
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task Delete(int id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public async Task<bool> Find(User user)
+		public override async Task<bool> Find(User user)
 		{
 			string sql = @"SELECT 1 FROM dbo.Users 
 							WHERE Lower(username) ='" + user.UserName + "'";
 			var result = await _db.GetData<bool, dynamic>(sql, new { });
 			return result;
-		}
-
-		public Task<User> Get(int id)
-		{
-			throw new NotImplementedException();
 		}
 
 		public Task<User> GetByUserName(string userName)
@@ -60,16 +46,6 @@ namespace Infrastructure.Repositories.AccountRepo
 		public async Task RegisterAccount(User user)
 		{
 			await Add(user);
-		}
-
-		public Task<List<Product>> SearchData(string keyword)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task Update(User entity)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

@@ -71,12 +71,12 @@
 	</div>
 	<div class="col col-md-10 m-auto">
 		<EditForm Model="@model" OnValidSubmit="@Register">
-			<DataAnnotationsValidator />
-			<ValidationSummary />
+			<p class="text-danger"><DataAnnotationsValidator /></p>
+			<p class="text-danger"><ValidationSummary /></p>
 
 			<div class="mb-3">
 				<label class="form-label">Username</label>
-				<InputText type="username" class="form-control" id="username" @bind-Value="model.UserName" />
+				<InputText type="username" class="form-control" id="username" @bind-Value="model.UserName"/>
 			</div>
 			<div class="mb-3">
 				<label class="form-label">Password</label>

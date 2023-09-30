@@ -8,11 +8,13 @@ namespace BTMAppUI.Data.Models
         {
             Role = "User";
         }
+
         [Required]
-        [StringLength(100, ErrorMessage = "UserName is too long.")]
-        public string? UserName { get; set; }
+        [MaxLength(20, ErrorMessage = "UserName is too long.")]
+		[MinLength(5, ErrorMessage = "UserName is too short.")]
+		public string? UserName { get; set; }
 		[Required]
-		[StringLength(100, ErrorMessage = "Password is too long.")]
+		[MaxLength(20, ErrorMessage = "Password is too long.")]
 		[MinLength(5, ErrorMessage = "Password is too short.")]
 		public string? Password { get; set; }
         public string Role { get; set; }
