@@ -14,7 +14,7 @@ namespace DAL
 {
     public class SQLDataAccess : ISQLDataAccess
     {
-        private readonly IConfiguration _config;
+		private readonly IConfiguration _config;
 
 		public string ConnectionStringName { get; set; } = "Default";
         public SQLDataAccess(IConfiguration config)

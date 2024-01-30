@@ -46,7 +46,6 @@ namespace BTMAppUI
 				options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Administrator"));
 			});
 
-
 			builder.Services.ConfigureApplicationCookie(options =>
 			{
 				options.AccessDeniedPath = "/accessdenied";
