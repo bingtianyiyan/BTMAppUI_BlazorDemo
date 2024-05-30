@@ -24,7 +24,7 @@ namespace BTMAppUI.Service
 		public async Task<ProductImage> GetImage(int product_Id)
 		{
 			if (product_Id == 0) return null;
-			ProductImage image = await _uploadImageRepository.Get(product_Id);
+			var image = await _uploadImageRepository.Get(product_Id);
 			return image;
 		}
 	}

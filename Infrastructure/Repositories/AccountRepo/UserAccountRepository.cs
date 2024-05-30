@@ -22,15 +22,15 @@ namespace Infrastructure.Repositories.AccountRepo
 
 		public override Task<int> Add(User user)
 		{
-			string sql = @"INSERT INTO dbo.Users" +
-						 "([UserName],[Password],[Role])" +
-						 "VALUES (@UserName, @Password, @Role);";
+			string sql = @"INSERT INTO Users" +
+						 "(UserName,Password,Role)" +
+						 "VALUES (?UserName, ?Password, ?Role);";
 			return _db.InsertData(sql, user);
 		}
 
 		public override async Task<bool> Find(User user)
 		{
-			string sql = @"SELECT 1 FROM dbo.Users 
+			string sql = @"SELECT 1 FROM Users 
 							WHERE Lower(username) ='" + user.UserName + "'";
 			var result = await _db.GetData<bool, dynamic>(sql, new { });
 			return result;

@@ -21,15 +21,15 @@ namespace Infrastructure.Repositories.UploadImageRepo
 
 		public override Task<ProductImage> Get(int id)
 		{
-			string sql = "SELECT top 1 * FROM dbo.ProductImages WHERE Product_Id = " + id + " ORDER BY Image_Id DESC";
+			string sql = "SELECT * FROM ProductImages WHERE Product_Id = " + id + " ORDER BY Image_Id DESC limit 1";
 			var image = _db.GetData<ProductImage, dynamic>(sql, new { });
 			return image;
 		}
 
 		public async Task<bool> UploadImageAsync(ProductImage file)
 		{
-			string sql = @"INSERT INTO dbo.ProductImages(Image,Product_Id,File_Name)
-							VALUES(@Image,@Product_Id, @File_Name)";
+			string sql = @"INSERT INTO ProductImages(Image,Product_Id,File_Name)
+							VALUES(?Image,?Product_Id, ?File_Name)";
 
 			await _db.InsertData(sql, file);
 			return true;
