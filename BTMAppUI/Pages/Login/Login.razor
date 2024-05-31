@@ -1,23 +1,99 @@
-﻿@page "/login/login"
-
+﻿@page "/"
+@page "/login/login"
+@layout UserLayout
 @using BTMAppUI.Data.Authentication;
 @using BTMAppUI.Service;
 @using DAL.Contracts;
+@using System.ComponentModel.DataAnnotations;
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 @inject IUserAccountService userAccountService;
 @inject IJSRuntime js
 @inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager navManager
 @inject ProtectedSessionStorage ProtectedSessionStore
+@inject IMessageService _message
+<style>
+	.trigger {
+		font-size: 18px;
+		line-height: 64px;
+		padding: 0 24px;
+		cursor: pointer;
+		transition: color 0.3s;
+	}
 
+		.trigger:hover {
+			color: #1890ff;
+		}
+
+	.logo {
+		position: relative;
+		overflow: hidden;
+	}
+
+		.logo a {
+			height: 3.5rem;
+			display: flex;
+			align-items: center;
+		}
+
+			.logo a img {
+				height: 16px;
+				margin: 0px 0px 0px 24px;
+			}
+
+			.logo a h1 {
+				color: #1890ff;
+				margin: 0px 0px 0px 8px;
+				font-weight: 600;
+				font-size: 18px;
+			}
+</style>
+<div class="main__b__0">
+    <div class="login">
+<Form @ref="form"
+      ValidateOnChange="@auto"
+	  Model="@model">
+			<Tabs ActiveKey="123">
+				<TabPane Key="1" Tab="Account Login">
+					<FormItem>
+						<AntDesign.Input Placeholder="Username: Admin or Alice" Size="large" @bind-Value="@model.UserName">
+							<Prefix><Icon Type="user" /></Prefix>
+						</AntDesign.Input>
+					</FormItem>
+					<FormItem>
+						<AntDesign.Input Placeholder="Password: Admin or 123456" Size="large" @bind-Value="@model.Password" Type="password">
+							<Prefix><Icon Type="lock" /></Prefix>
+						</AntDesign.Input>
+					</FormItem>
+				</TabPane>
+			</Tabs>
+			<Button Type="primary" HtmlType="submit" Class="submit" Size="large" @onclick="Authenticate" Block>Log in </Button>
+	@* <FormItem Label="User Name">
+		<Input @bind-Value="model.UserName" />
+	</FormItem>
+	<FormItem Label="Password">
+		<InputPassword @bind-Value="model.Password" />
+	</FormItem>
+	<FormItem WrapperColOffset="8" WrapperColSpan="16">
+		<Button Type="@ButtonType.Primary" HtmlType="submit" @onclick="Authenticate">
+			Submit
+		</Button>
+	</FormItem> *@
+</Form>
+	</div>
+</div>
 
 @code {
 	private class Model
 	{
+		[Required]
 		public string UserName { get; set; }
+		[Required]
 		public string Password { get; set; }
 	}
+
 	private Model model = new Model();
+	private bool validateOnChange = false;
 	private string ErrorMessage;
 	private string SuccessMessage;
 	private async Task Authenticate()
@@ -25,7 +101,7 @@
 		var userAccount = await userAccountService.GetByUserName(model.UserName);
 		if (userAccount == null || userAccount.Password != model.Password)
 		{
-			ErrorMessage = "Sorry, username or password is invalid.";
+			await _message.Error("登录失败");
 			return;
 		}
 
@@ -35,33 +111,16 @@
 				UserName = userAccount.UserName,
 				Role = userAccount.Role
 			});
-		navManager.NavigateTo("/", true);
+		navManager.NavigateTo("/Products/Products", true);
+		await _message.Success("登录成功");
 	}
 
+	AntDesign.Form<Model> form;
 
+	private bool auto = false;
+
+	public void OnValidate()
+	{
+		form.Validate();
+	}
 }
-<div class="border col-md-4 col-sm-6 col-sm-8 col-sm-12  col-lg-4 col-md-6 m-auto mt-5 p-5 shadow-sm">
-	<div class="m-auto text-center">
-		<h4>Login</h4>
-	</div>
-	<div class="col col-md-10 m-auto">
-		<div class="mb-3">
-			<label class="form-label">Username</label>
-			<input type="username" class="form-control" id="username" aria-describedby="emailHelp" @bind="model.UserName">
-		</div>
-		<div class="mb-3">
-			<label class="form-label">Password</label>
-			<input type="password" class="form-control" id="exampleInputPassword1" @bind="model.Password">
-		</div>
-		<div class="text-center">
-			<button type="button" class="btn m-auto" @onclick="Authenticate">Submit</button>
-		</div>
-		@if (ErrorMessage != null || SuccessMessage != null)
-		{
-			<div class="text-center  mt-3 border">
-				<span class="text-danger">@ErrorMessage</span>
-				<span class="text-success">@SuccessMessage</span>
-			</div>
-		}
-	</div>
-</div>

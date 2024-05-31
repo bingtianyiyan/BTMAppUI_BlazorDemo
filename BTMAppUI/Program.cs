@@ -51,6 +51,10 @@ namespace BTMAppUI
 				options.AccessDeniedPath = "/accessdenied";
 			});
 
+
+			//ant design
+			builder.Services.AddAntDesign();
+
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.

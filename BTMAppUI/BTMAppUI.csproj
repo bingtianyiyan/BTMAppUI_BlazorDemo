@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Pages\Login\Login.razor.css" />
     <None Remove="Pages\Products\ProductDetails.razor.css" />
     <None Remove="Pages\Registration\Registration.razor.css" />
     <None Remove="Pages\Reports\Reports.razor.css" />
@@ -16,13 +15,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Pages\Login\Login.razor.css" />
     <Content Include="Pages\Products\ProductDetails.razor.css" />
     <Content Include="Pages\Registration\Registration.razor.css" />
     <Content Include="Pages\Reports\Reports.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AntDesign" Version="0.19.1" />
+    <PackageReference Include="AntDesign.ProLayout" Version="0.19.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.16" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.16" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.16" />
@@ -37,6 +37,12 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets\403.svg" />
+    <None Include="wwwroot\assets\logo.svg" />
+    <None Include="wwwroot\js\browser-resize.js" />
   </ItemGroup>
 
 </Project>
